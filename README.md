@@ -157,12 +157,8 @@ The following styles are presets, but can be overwritten in the TableStyle class
         new ColumnSetting('Created', ColumnSetting::FORMAT_DATE, 'getCreated'),
         new ColumnSetting('Weight', ColumnSetting::FORMAT_FLOAT, 'getWeight', 2)
     ];
-
-    //generate
-    $generator = new ExcelGenerator(
-        new SpreadSheetType()
-    );
-
+    
+    //set style
     $headerStyle = [
         'fill' => [
             'fillType' => Fill::FILL_SOLID,
@@ -175,12 +171,17 @@ The following styles are presets, but can be overwritten in the TableStyle class
             'color' => array('rgb' => '66FF66')
         )
     ];
+    
     $style = new TableStyle();
     $style
         ->setHeaderRowHeight(2)
         ->setHeaderStyle($headerStyle)
         ->setDataRowStyle($dataRowStyle);
 
+    //generate
+    $generator = new ExcelGenerator(
+        new SpreadSheetType()
+    );
 
     $path = $generator
         ->setContent($users)
