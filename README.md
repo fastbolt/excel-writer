@@ -1,5 +1,5 @@
-#-- Excel Writer Package --
-This package is used for simple Excel-file generation. You can pass either arrays of arrays, or arrays of entities. If an entity references another entity, getId() will be called on the referenced entity and the return value will be used instead.
+# Excel-Writer
+This component is used for simple Excel-file generation. You can pass either arrays of arrays, or arrays of entities to the generator class. If an entity references another entity, getId() will be called on the referenced entity and the return value will be used instead.
 
 ## Table size
 The width of the table is set by the number of headers. The number of rows is set by the amount of data.
