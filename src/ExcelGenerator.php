@@ -10,7 +10,6 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ExcelGenerator
 {
-    //TODO set the apply... and save functions to private, adapt tests
     private LetterProvider  $letterProvider;
     private SpreadSheetType $spreadsheetType;
     private DataConverter $converter;
@@ -58,7 +57,6 @@ class ExcelGenerator
     {
         $sheetType = $this->spreadsheetType;
 
-        $sheetType->setMaxRowNumber(count($content) + $sheetType->getMaxRowNumber());
         $sheetType->setContent($content);
 
         return $this;
@@ -76,6 +74,11 @@ class ExcelGenerator
      */
     public function generateSpreadsheet(string $url = ''): string
     {
+        $headerRowHeight = $this->spreadsheetType->getStyle()->getHeaderRowHeight();
+        $this->spreadsheetType
+            ->setMaxRowNumber(count($this->spreadsheetType->getContent()) + $headerRowHeight)
+            ->setContentStartRow($headerRowHeight + 1);
+
         if (count($this->spreadsheetType->getColumns()) === 0) {
             throw new \ArgumentCountError('At least one column must be set.');
         }
@@ -257,12 +260,6 @@ class ExcelGenerator
                 $sheet->mergeCells($firstCell . ':' . $lastCell);
             }
             unset($firstCell, $lastCell);
-
-            //adapt row count to changed header height
-            $this->spreadsheetType->setMaxRowNumber(
-                $this->spreadsheetType->getMaxRowNumber() + $style->getHeaderRowHeight()
-            );
-            $this->spreadsheetType->setContentStartRow($style->getHeaderRowHeight() + 1);
         }
 
         //set style
