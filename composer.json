@@ -1,12 +1,14 @@
 {
-    "name": "sleussink/excel-writer",
+    "name": "fastbolt/excel-writer",
     "type": "library",
     "description": "A library for simple creation of excel-files",
     "keywords": [
-        "sleussink",
-        "ExcelWriter"
+        "fastbolt",
+        "excel",
+        "writer",
+        "excel-writer"
     ],
-    "homepage": "https://github.com/sleussink/ExcelWriter",
+    "homepage": "https://github.com/fastbolt/ExcelWriter",
     "license": "MIT",
     "authors": [
         {
