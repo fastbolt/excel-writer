@@ -1,5 +1,5 @@
 # Excel-Writer
-This component is used for simple Excel-file generation. You can pass either arrays of arrays, or arrays of entities to the generator class. If an entity references another entity, getId() will be called on the referenced entity and the return value will be used instead.
+This component is used for simple Excel-file generation. You can pass either arrays of arrays, or arrays of entities to the generator class. If an entity references another entity, you will need to pass a static function to retrieve a specific value from that entity.
 
 ## Table size
 The width of the table is set by the number of headers. The number of rows is set by the amount of data.
