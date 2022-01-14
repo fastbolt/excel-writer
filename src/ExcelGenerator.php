@@ -1,6 +1,6 @@
 <?php
 
-namespace Sleussink\ExcelWriter;
+namespace Fastbolt\ExcelWriter;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -10,6 +10,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ExcelGenerator
 {
+    //TODO set the apply... and save functions to private, adapt tests
     private LetterProvider  $letterProvider;
     private SpreadSheetType $spreadsheetType;
     private DataConverter $converter;
@@ -104,6 +105,7 @@ class ExcelGenerator
                 ->setAutoSize(true);
         }
 
+        //TODO return fileinfo object (php object)
         return $this->saveFile($url);
     }
 

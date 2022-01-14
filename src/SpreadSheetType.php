@@ -1,6 +1,6 @@
 <?php
 
-namespace Sleussink\ExcelWriter;
+namespace Fastbolt\ExcelWriter;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;

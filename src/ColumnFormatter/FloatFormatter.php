@@ -1,6 +1,6 @@
 <?php
 
-namespace Sleussink\ExcelWriter\ColumnFormatter;
+namespace Fastbolt\ExcelWriter\ColumnFormatter;
 
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Sleussink\ExcelWriter\ColumnSetting;

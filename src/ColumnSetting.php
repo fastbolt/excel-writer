@@ -1,12 +1,12 @@
 <?php
 
-namespace Sleussink\ExcelWriter;
+namespace Fastbolt\ExcelWriter;
 
-use Sleussink\ExcelWriter\ColumnFormatter\ColumnFormatter;
-use Sleussink\ExcelWriter\ColumnFormatter\DateFormatter;
-use Sleussink\ExcelWriter\ColumnFormatter\FloatFormatter;
-use Sleussink\ExcelWriter\ColumnFormatter\IntegerFormatter;
-use Sleussink\ExcelWriter\ColumnFormatter\StringFormatter;
+use Fastbolt\ExcelWriter\ColumnFormatter\ColumnFormatter;
+use Fastbolt\ExcelWriter\ColumnFormatter\DateFormatter;
+use Fastbolt\ExcelWriter\ColumnFormatter\FloatFormatter;
+use Fastbolt\ExcelWriter\ColumnFormatter\IntegerFormatter;
+use Fastbolt\ExcelWriter\ColumnFormatter\StringFormatter;
 
 class ColumnSetting
 {

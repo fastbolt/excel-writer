@@ -1,6 +1,6 @@
 <?php
 
-namespace Sleussink\ExcelWriter;
+namespace Fastbolt\ExcelWriter;
 
 use Exception;
 
