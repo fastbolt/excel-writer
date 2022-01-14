@@ -1,19 +1,19 @@
 <?php
 
-namespace Sleussink\ExcelWriter;
+namespace Fastbolt\ExcelWriter;
 
+use Fastbolt\ExcelWriter\ColumnFormatter\DateFormatter;
+use Fastbolt\ExcelWriter\ColumnFormatter\FloatFormatter;
+use Fastbolt\ExcelWriter\ColumnFormatter\IntegerFormatter;
+use Fastbolt\ExcelWriter\ColumnFormatter\StringFormatter;
 use PHPUnit\Framework\TestCase;
-use Sleussink\ExcelWriter\ColumnFormatter\DateFormatter;
-use Sleussink\ExcelWriter\ColumnFormatter\FloatFormatter;
-use Sleussink\ExcelWriter\ColumnFormatter\IntegerFormatter;
-use Sleussink\ExcelWriter\ColumnFormatter\StringFormatter;
 
 /**
- * @covers \Sleussink\ExcelWriter\ColumnSetting
- * @uses \Sleussink\ExcelWriter\ColumnFormatter\StringFormatter
- * @uses \Sleussink\ExcelWriter\ColumnFormatter\FloatFormatter
- * @uses \Sleussink\ExcelWriter\ColumnFormatter\DateFormatter
- * @uses \Sleussink\ExcelWriter\ColumnFormatter\IntegerFormatter
+ * @covers \Fastbolt\ExcelWriter\ColumnSetting
+ * @uses \Fastbolt\ExcelWriter\ColumnFormatter\StringFormatter
+ * @uses \Fastbolt\ExcelWriter\ColumnFormatter\FloatFormatter
+ * @uses \Fastbolt\ExcelWriter\ColumnFormatter\DateFormatter
+ * @uses \Fastbolt\ExcelWriter\ColumnFormatter\IntegerFormatter
  */
 class ColumnSettingTest extends TestCase
 {

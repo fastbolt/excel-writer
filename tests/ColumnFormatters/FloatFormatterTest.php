@@ -2,14 +2,14 @@
 
 namespace ColumnFormatters;
 
+use Fastbolt\ExcelWriter\ColumnFormatter\FloatFormatter;
+use Fastbolt\ExcelWriter\ColumnSetting;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PHPUnit\Framework\TestCase;
-use Sleussink\ExcelWriter\ColumnFormatter\FloatFormatter;
-use Sleussink\ExcelWriter\ColumnSetting;
 
 /**
- * @covers \Sleussink\ExcelWriter\ColumnFormatter\FloatFormatter
- * @uses \Sleussink\ExcelWriter\ColumnSetting
+ * @covers \Fastbolt\ExcelWriter\ColumnFormatter\FloatFormatter
+ * @uses \Fastbolt\ExcelWriter\ColumnSetting
  */
 class FloatFormatterTest extends TestCase
 {

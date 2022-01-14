@@ -1,12 +1,12 @@
 <?php
 
-namespace Sleussink\ExcelWriter\Tests;
+namespace Fastbolt\ExcelWriter\Tests;
 
+use Fastbolt\ExcelWriter\ColumnSetting;
+use Fastbolt\ExcelWriter\SpreadSheetType;
+use Fastbolt\ExcelWriter\TableStyle;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PHPUnit\Framework\TestCase;
-use Sleussink\ExcelWriter\ColumnSetting;
-use Sleussink\ExcelWriter\SpreadSheetType;
-use Sleussink\ExcelWriter\TableStyle;
 
 class SpreadSheetTypeTest extends TestCase
 {

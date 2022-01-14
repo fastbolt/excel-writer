@@ -1,6 +1,6 @@
 <?php
 
-namespace Sleussink\ExcelWriter\Tests\_Helpers;
+namespace Fastbolt\ExcelWriter\Tests\_Helpers;
 
 use DateTime;
 

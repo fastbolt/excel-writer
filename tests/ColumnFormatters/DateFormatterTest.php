@@ -2,9 +2,9 @@
 
 namespace ColumnFormatters;
 
+use Fastbolt\ExcelWriter\ColumnFormatter\DateFormatter;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PHPUnit\Framework\TestCase;
-use Sleussink\ExcelWriter\ColumnFormatter\DateFormatter;
 
 class DateFormatterTest extends TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Sleussink\ExcelWriter\Tests;
+namespace Fastbolt\ExcelWriter\Tests;
 
+use Fastbolt\ExcelWriter\LetterProvider;
 use PHPUnit\Framework\TestCase;
-use Sleussink\ExcelWriter\LetterProvider;
 
 class LetterProviderTest extends TestCase
 {

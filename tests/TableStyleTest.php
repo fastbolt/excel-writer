@@ -1,9 +1,9 @@
 <?php
 
-namespace Sleussink\ExcelWriter\Tests;
+namespace Fastbolt\ExcelWriter\Tests;
 
+use Fastbolt\ExcelWriter\TableStyle;
 use PHPUnit\Framework\TestCase;
-use Sleussink\ExcelWriter\TableStyle;
 
 class TableStyleTest extends TestCase
 {

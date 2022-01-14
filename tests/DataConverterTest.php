@@ -1,16 +1,16 @@
 <?php
 
-namespace Sleussink\ExcelWriter\Tests;
+namespace Fastbolt\ExcelWriter\Tests;
 
-use Sleussink\ExcelWriter\Tests\_Helpers\Dummy;
 use DateTime;
+use Fastbolt\ExcelWriter\ColumnSetting;
+use Fastbolt\ExcelWriter\DataConverter;
+use Fastbolt\ExcelWriter\Tests\_Helpers\Dummy;
 use PHPUnit\Framework\TestCase;
-use Sleussink\ExcelWriter\ColumnSetting;
-use Sleussink\ExcelWriter\DataConverter;
 
 /**
- * @covers \Sleussink\ExcelWriter\DataConverter
- * @uses \Sleussink\ExcelWriter\ColumnSetting
+ * @covers \Fastbolt\ExcelWriter\DataConverter
+ * @uses \Fastbolt\ExcelWriter\ColumnSetting
  */
 class DataConverterTest extends TestCase
 {

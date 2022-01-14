@@ -1,7 +1,13 @@
 <?php
 
-namespace Sleussink\ExcelWriter\Tests;
+namespace Fastbolt\ExcelWriter\Tests;
 
+use Fastbolt\ExcelWriter\ColumnSetting;
+use Fastbolt\ExcelWriter\DataConverter;
+use Fastbolt\ExcelWriter\ExcelGenerator;
+use Fastbolt\ExcelWriter\LetterProvider;
+use Fastbolt\ExcelWriter\SpreadSheetType;
+use Fastbolt\ExcelWriter\TableStyle;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
@@ -9,19 +15,13 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PHPUnit\Framework\TestCase;
-use Sleussink\ExcelWriter\ColumnSetting;
-use Sleussink\ExcelWriter\DataConverter;
-use Sleussink\ExcelWriter\ExcelGenerator;
-use Sleussink\ExcelWriter\LetterProvider;
-use Sleussink\ExcelWriter\SpreadSheetType;
-use Sleussink\ExcelWriter\TableStyle;
 
 /**
- * @covers \Sleussink\ExcelWriter\ExcelGenerator
- * @uses \Sleussink\ExcelWriter\DataConverter
- * @uses \Sleussink\ExcelWriter\LetterProvider
- * @uses \Sleussink\ExcelWriter\SpreadSheetType
- * @uses \Sleussink\ExcelWriter\TableStyle
+ * @covers \Fastbolt\ExcelWriter\ExcelGenerator
+ * @uses \Fastbolt\ExcelWriter\DataConverter
+ * @uses \Fastbolt\ExcelWriter\LetterProvider
+ * @uses \Fastbolt\ExcelWriter\SpreadSheetType
+ * @uses \Fastbolt\ExcelWriter\TableStyle
  */
 class ExcelGeneratorTest extends TestCase
 {
