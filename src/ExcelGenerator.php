@@ -143,6 +143,7 @@ class ExcelGenerator
         $currentRow = $this->spreadsheetType->getContentStartRow();
         $colCount   = count($cols);
 
+        $content = array_values($content);
         if (getType($content[0]) === 'object') {
             //convert entities to usable arrays by calling their getters and callables
             $content = $this->converter->convertEntityToArray($content, $cols);
@@ -153,6 +154,7 @@ class ExcelGenerator
         //write
         /** @var array $itemRow */
         foreach ($content as $itemRow) {
+            $itemRow = array_values($itemRow);
             for ($counter = 0; $counter < $colCount; $counter++) {
                 $colName     = $cols[$counter]->getName();
                 $coordinates = $colName . $currentRow;
