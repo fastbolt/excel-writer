@@ -3,7 +3,7 @@
 namespace Fastbolt\ExcelWriter\ColumnFormatter;
 
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use Sleussink\ExcelWriter\ColumnSetting;
+use Fastbolt\ExcelWriter\ColumnSetting;
 
 class FloatFormatter extends BaseFormatter
 {
