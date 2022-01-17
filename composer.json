@@ -30,12 +30,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Sleussink\\ExcelWriter\\": "src/"
+            "Fastbolt\\ExcelWriter\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Sleussink\\ExcelWriter\\Tests\\": "tests/"
+            "Fastbolt\\ExcelWriter\\Tests\\": "tests/"
         }
     },
     "scripts": {
