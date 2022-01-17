@@ -7,6 +7,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use SplFileInfo;
 
 class ExcelGenerator
 {
@@ -68,12 +69,11 @@ class ExcelGenerator
      *
      * @param string $url the path to where the file is supposed to be saved to (includes filename)
      *
-     * @return string          returns path of the generated File
-     *
+     * @return SplFileInfo
      * @throws Exception
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    public function generateSpreadsheet(string $url = ''): string
+    public function generateSpreadsheet(string $url = ''): SplFileInfo
     {
         $headerRowHeight = $this->spreadsheetType->getStyle()->getHeaderRowHeight();
         $this->spreadsheetType
@@ -105,17 +105,16 @@ class ExcelGenerator
                 ->setAutoSize(true);
         }
 
-        //TODO return fileinfo object (php object)
         return $this->saveFile($url);
     }
 
     /**
      * @param string $url
      *
-     * @return string
+     * @return SplFileInfo
      * @throws Exception
      */
-    public function saveFile(string $url = ''): string
+    public function saveFile(string $url = ''): SplFileInfo
     {
         if ($url === '') {
             $url = sys_get_temp_dir() . '/spreadsheet';
@@ -128,7 +127,7 @@ class ExcelGenerator
         $writer = new Xlsx($this->spreadsheetType->getSpreadsheet());
         $writer->save($url);
 
-        return $url;
+        return new SplFileInfo($url);
     }
 
     /**
@@ -181,14 +180,6 @@ class ExcelGenerator
 
         $this->spreadsheetType->getSheet()
             ->getStyle($firstContentCell . ':' . $lastContentCell)
-            ->applyFromArray([
-                'borders' => [
-                    'allBorders' => [
-                        'borderStyle' => Border::BORDER_THIN,
-                        'color'       => ['argb' => 'FFF0000'],
-                    ],
-                ],
-            ])
             ->applyFromArray($style->getDataRowStyle());
 
         return $this;
@@ -276,7 +267,7 @@ class ExcelGenerator
                 'borders'   => [
                     'allBorders' => [
                         'borderStyle' => Border::BORDER_MEDIUM,
-                        'color'       => ['argb' => 'FFF0000'],
+                        'color'       => ['argb' => 'FF366092'],
                     ],
                 ],
             ])

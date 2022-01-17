@@ -18,7 +18,7 @@ the values you want to display (like "getName").
     ];
 
     $generator = new ExcelGenerator(new SpreadSheetType());
-    $path = $generator
+    $file = $generator
                 ->setContent($data)
                 ->setColumns($columns)
                 ->generateSpreadsheet('../var/temp/excelwriter');
@@ -56,7 +56,7 @@ Create an instance of the TableStyle class and set styles for the header row and
         ->setDataRowStyle($dataRowStyle);
 
 
-    $path = $generator
+    $file = $generator
         ->setContent($data)
         ->setColumns($columns)
         ->setStyle($style)
@@ -72,9 +72,7 @@ The following styles are presets, but can be overwritten in the TableStyle class
 - borders: medium
 - vertical-alignment: center
 - horizontal-alignment: center
-
-###data rows
-- borders: thin
+- color: FF366092 (blue)
 
 ## NOTES
 * Floats have a preset decimal length of 2 (0.12), but that can be configured with the 4th parameter of the ColumnSetting constructor or its method setDecimalLength().
@@ -111,7 +109,7 @@ The following styles are presets, but can be overwritten in the TableStyle class
         new SpreadSheetType()
     );
 
-    $path = $generator
+    $file = $generator
         ->setContent($data)
         ->setColumns($columns)
         ->generateSpreadsheet('../var/temp/filename');
@@ -137,7 +135,7 @@ The following styles are presets, but can be overwritten in the TableStyle class
         new SpreadSheetType()
     );
 
-    $path = $generator
+    $file = $generator
         ->setContent($users)
         ->setColumns($columns)
         ->generateSpreadsheet('../var/temp/filename');
@@ -183,17 +181,15 @@ The following styles are presets, but can be overwritten in the TableStyle class
         new SpreadSheetType()
     );
 
-    $path = $generator
+    $file = $generator
         ->setContent($users)
         ->setColumns($columns)
         ->setStyle($style)
         ->generateSpreadsheet('../var/temp/filename');
 
     //download
-    $response = new BinaryFileResponse($path);
+    $response = new BinaryFileResponse($file->getPath());
     $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
     return $response;
 ```
-#   e x c e l - w r i t e r 
- 
- 
+#   e x c e l - w r i t e r
