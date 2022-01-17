@@ -180,14 +180,6 @@ class ExcelGenerator
 
         $this->spreadsheetType->getSheet()
             ->getStyle($firstContentCell . ':' . $lastContentCell)
-            ->applyFromArray([
-                'borders' => [
-                    'allBorders' => [
-                        'borderStyle' => Border::BORDER_THIN,
-                        'color'       => ['argb' => 'FFF0000'],
-                    ],
-                ],
-            ])
             ->applyFromArray($style->getDataRowStyle());
 
         return $this;
@@ -275,7 +267,7 @@ class ExcelGenerator
                 'borders'   => [
                     'allBorders' => [
                         'borderStyle' => Border::BORDER_MEDIUM,
-                        'color'       => ['argb' => 'FFF0000'],
+                        'color'       => ['argb' => 'FF366092'],
                     ],
                 ],
             ])
