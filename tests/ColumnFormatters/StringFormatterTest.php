@@ -14,6 +14,5 @@ class StringFormatterTest extends TestCase
         $formatter = new StringFormatter();
         self::assertEquals(['vertical' => Alignment::HORIZONTAL_LEFT], $formatter->getAlignment(), 'alignment');
         self::assertEquals(['formatCode' => NumberFormat::FORMAT_TEXT], $formatter->getNumberFormat(), 'number format');
-
     }
 }
