@@ -18,7 +18,7 @@ the values you want to display (like "getName").
     ];
 
     $generator = new ExcelGenerator(new SpreadSheetType());
-    $path = $generator
+    $file = $generator
                 ->setContent($data)
                 ->setColumns($columns)
                 ->generateSpreadsheet('../var/temp/excelwriter');
@@ -56,7 +56,7 @@ Create an instance of the TableStyle class and set styles for the header row and
         ->setDataRowStyle($dataRowStyle);
 
 
-    $path = $generator
+    $file = $generator
         ->setContent($data)
         ->setColumns($columns)
         ->setStyle($style)
@@ -111,7 +111,7 @@ The following styles are presets, but can be overwritten in the TableStyle class
         new SpreadSheetType()
     );
 
-    $path = $generator
+    $file = $generator
         ->setContent($data)
         ->setColumns($columns)
         ->generateSpreadsheet('../var/temp/filename');
@@ -137,7 +137,7 @@ The following styles are presets, but can be overwritten in the TableStyle class
         new SpreadSheetType()
     );
 
-    $path = $generator
+    $file = $generator
         ->setContent($users)
         ->setColumns($columns)
         ->generateSpreadsheet('../var/temp/filename');
@@ -183,7 +183,7 @@ The following styles are presets, but can be overwritten in the TableStyle class
         new SpreadSheetType()
     );
 
-    $path = $generator
+    $file = $generator
         ->setContent($users)
         ->setColumns($columns)
         ->setStyle($style)
@@ -194,6 +194,4 @@ The following styles are presets, but can be overwritten in the TableStyle class
     $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
     return $response;
 ```
-#   e x c e l - w r i t e r 
- 
- 
+#   e x c e l - w r i t e r
