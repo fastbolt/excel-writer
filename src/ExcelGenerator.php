@@ -36,7 +36,7 @@ class ExcelGenerator
     /**
      * @param ColumnSetting[] $columns
      *
-     * @return $this
+     * @return ExcelGenerator
      */
     public function setColumns(array $columns): ExcelGenerator
     {
@@ -133,7 +133,7 @@ class ExcelGenerator
     /**
      * @param array $content
      *
-     * @return $this
+     * @return ExcelGenerator
      * @throws \Exception
      */
     public function applyContent(array $content): ExcelGenerator
@@ -169,7 +169,7 @@ class ExcelGenerator
     /**
      * @param TableStyle $style
      *
-     * @return $this
+     * @return ExcelGenerator
      */
     public function applyStyle(TableStyle $style): ExcelGenerator
     {
