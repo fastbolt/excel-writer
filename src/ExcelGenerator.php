@@ -262,7 +262,7 @@ class ExcelGenerator
             ->applyFromArray([
                 'alignment' => [
                     'vertical'   => Alignment::VERTICAL_CENTER,
-                    'horizontal' => Alignment::VERTICAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
                 ],
                 'borders'   => [
                     'allBorders' => [
