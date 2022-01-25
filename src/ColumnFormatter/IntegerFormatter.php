@@ -9,7 +9,7 @@ class IntegerFormatter implements ColumnFormatter
 {
     public function getAlignment(): array
     {
-        return ['vertical' => Alignment::HORIZONTAL_RIGHT];
+        return ['horizontal' => Alignment::HORIZONTAL_RIGHT];
     }
 
     public function getNumberFormat(): ?array

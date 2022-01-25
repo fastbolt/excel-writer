@@ -8,7 +8,7 @@ class BaseFormatter implements ColumnFormatter
 {
     public function getAlignment(): array
     {
-        return ['vertical' => Alignment::HORIZONTAL_LEFT];
+        return ['horizontal' => Alignment::HORIZONTAL_LEFT];
     }
 
     public function getNumberFormat(): ?array

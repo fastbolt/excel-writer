@@ -16,7 +16,7 @@ class FloatFormatter extends BaseFormatter
 
     public function getAlignment(): array
     {
-        return ['vertical' => Alignment::HORIZONTAL_RIGHT];
+        return ['horizontal' => Alignment::HORIZONTAL_RIGHT];
     }
 
     /**
