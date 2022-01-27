@@ -14,6 +14,6 @@ class StringFormatter extends BaseFormatter
 
     public function getNumberFormat(): array
     {
-        return ['formatCode' => NumberFormat::FORMAT_TEXT];
+        return ['formatCode' => '#'];   //# is for custom, here to avoid scientific number displays
     }
 }
