@@ -10,10 +10,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Fastbolt\ExcelWriter\ColumnSetting
- * @uses \Fastbolt\ExcelWriter\ColumnFormatter\StringFormatter
- * @uses \Fastbolt\ExcelWriter\ColumnFormatter\FloatFormatter
- * @uses \Fastbolt\ExcelWriter\ColumnFormatter\DateFormatter
- * @uses \Fastbolt\ExcelWriter\ColumnFormatter\IntegerFormatter
  */
 class ColumnSettingTest extends TestCase
 {

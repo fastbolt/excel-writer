@@ -4,6 +4,9 @@ namespace Fastbolt\ExcelWriter\Tests\_Helpers;
 
 use DateTime;
 
+/**
+ * @coversNothing
+ */
 class Dummy
 {
     public function getName(): string

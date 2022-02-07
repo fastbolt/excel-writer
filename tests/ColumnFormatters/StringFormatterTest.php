@@ -7,6 +7,9 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Fastbolt\ExcelWriter\ColumnFormatter\StringFormatter
+ */
 class StringFormatterTest extends TestCase
 {
     public function testGetterSetter(): void

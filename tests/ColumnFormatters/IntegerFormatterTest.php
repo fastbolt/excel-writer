@@ -6,6 +6,9 @@ use Fastbolt\ExcelWriter\ColumnFormatter\IntegerFormatter;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Fastbolt\ExcelWriter\ColumnFormatter\IntegerFormatter
+ */
 class IntegerFormatterTest extends TestCase
 {
     public function testGetterSetter(): void

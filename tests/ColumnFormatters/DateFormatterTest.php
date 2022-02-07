@@ -6,6 +6,9 @@ use Fastbolt\ExcelWriter\ColumnFormatter\DateFormatter;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Fastbolt\ExcelWriter\ColumnFormatter\DateFormatter
+ */
 class DateFormatterTest extends TestCase
 {
     public function testGetterSetter(): void

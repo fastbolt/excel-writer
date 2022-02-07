@@ -8,6 +8,9 @@ use Fastbolt\ExcelWriter\TableStyle;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Fastbolt\ExcelWriter\SpreadSheetType
+ */
 class SpreadSheetTypeTest extends TestCase
 {
     public function testSettersGetters(): void

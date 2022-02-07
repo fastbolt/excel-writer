@@ -17,9 +17,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Fastbolt\ExcelWriter\ExcelGenerator
- * @uses \Fastbolt\ExcelWriter\DataConverter
- * @uses \Fastbolt\ExcelWriter\SpreadSheetType
- * @uses \Fastbolt\ExcelWriter\TableStyle
  */
 class ExcelGeneratorTest extends TestCase
 {

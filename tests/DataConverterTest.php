@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Fastbolt\ExcelWriter\DataConverter
- * @uses \Fastbolt\ExcelWriter\ColumnSetting
  */
 class DataConverterTest extends TestCase
 {

@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Fastbolt\ExcelWriter\ColumnFormatter\FloatFormatter
- * @uses \Fastbolt\ExcelWriter\ColumnSetting
  */
 class FloatFormatterTest extends TestCase
 {

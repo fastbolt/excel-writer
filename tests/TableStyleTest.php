@@ -5,6 +5,9 @@ namespace Fastbolt\ExcelWriter\Tests;
 use Fastbolt\ExcelWriter\TableStyle;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Fastbolt\ExcelWriter\TableStyle
+ */
 class TableStyleTest extends TestCase
 {
     public function testGetterSetter(): void
