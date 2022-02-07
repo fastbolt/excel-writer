@@ -17,7 +17,7 @@ the values you want to display (like "getName").
             new ColumnSetting('ID', ColumnSetting::FORMAT_INTEGER, 'getId'),
     ];
 
-    $generator = new ExcelGenerator(new SpreadSheetType());
+    $generator = new ExcelGenerator();
     $file = $generator
                 ->setContent($data)
                 ->setColumns($columns)
@@ -105,9 +105,7 @@ The following styles are presets, but can be overwritten in the TableStyle class
     ];
 
     //generate
-    $generator = new ExcelGenerator(
-        new SpreadSheetType()
-    );
+    $generator = new ExcelGenerator();
 
     $file = $generator
         ->setContent($data)
@@ -131,9 +129,7 @@ The following styles are presets, but can be overwritten in the TableStyle class
     ];
 
     //generate
-    $generator = new ExcelGenerator(
-        new SpreadSheetType()
-    );
+    $generator = new ExcelGenerator();
 
     $file = $generator
         ->setContent($users)
@@ -177,9 +173,7 @@ The following styles are presets, but can be overwritten in the TableStyle class
         ->setDataRowStyle($dataRowStyle);
 
     //generate
-    $generator = new ExcelGenerator(
-        new SpreadSheetType()
-    );
+    $generator = new ExcelGenerator();
 
     $file = $generator
         ->setContent($users)
