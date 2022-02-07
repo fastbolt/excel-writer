@@ -119,8 +119,7 @@ class ExcelGenerator
     public function saveFile(string $url = ''): SplFileInfo
     {
         if ($url === '') {
-            $timeStamp = date('y_m_d-') . time();
-            $url = sys_get_temp_dir() . '/spreadsheet ' . $timeStamp;
+            $url = sys_get_temp_dir() . '/spreadsheet ' . time();
         }
 
         if (!strpos($url, '.xlsx')) {
