@@ -74,9 +74,9 @@ The following styles are presets, but can be overwritten in the TableStyle class
 - horizontal-alignment: center
 - color: FF366092 (blue)
 
-## NOTES
+## HINTS
 * Floats have a preset decimal length of 2 (0.12), but that can be configured with the 4th parameter of the ColumnSetting constructor or its method setDecimalLength().
-* PHP and Excel have problems working with large numbers. Pass numbers with 16+ digits as strings to a string columns to display them correctly.
+* PHP and Excel have problems working with large numbers. Pass numbers with 16+ digits as strings to string columns to display them correctly.
 
 ## Example usage
 
