@@ -2,6 +2,8 @@
 
 namespace Fastbolt\ExcelWriter;
 
+use Fastbolt\ExcelWriter\ColumnFormatter\StringFormatter;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
@@ -156,8 +158,16 @@ class ExcelGenerator
         foreach ($content as $itemRow) {
             $itemRow = array_values($itemRow);
             for ($counter = 0; $counter < $colCount; $counter++) {
-                $colName     = $cols[$counter]->getName();
+                $col         = $cols[$counter];
+                $colName     = $col->getName();
                 $coordinates = $colName . $currentRow;
+
+                //makes sure long numbers marked as string are displayed correctly
+                if ($col->getFormatter() instanceof StringFormatter) {
+                    $sheet->setCellValueExplicit($coordinates, $itemRow[$counter], DataType::TYPE_STRING);
+                    continue;
+                }
+
                 $sheet->setCellValue($coordinates, $itemRow[$counter]);
             }
             $currentRow++;
