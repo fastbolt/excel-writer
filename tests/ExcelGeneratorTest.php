@@ -9,9 +9,9 @@ use Fastbolt\ExcelWriter\SpreadSheetType;
 use Fastbolt\ExcelWriter\TableStyle;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Style\Style;
+use PhpOffice\PhpSpreadsheet\Worksheet\ColumnDimension;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PHPUnit\Framework\TestCase;
 
@@ -30,15 +30,15 @@ class ExcelGeneratorTest extends TestCase
         $this->converter = $this->createMock(DataConverter::class);
         $this->mockedDependencies = [
             $this->spreadsheetType,
-            $this->converter
+            $this->converter,
         ];
     }
 
     public function testGenerateSpreadsheetAllFalse(): void
     {
         $generator = $this->getMockBuilder(ExcelGenerator::class)
-                          ->setConstructorArgs($this->mockedDependencies)
-                          ->getMock();
+            ->setConstructorArgs($this->mockedDependencies)
+            ->getMock();
 
         $generator->expects(self::never())->method('applyColumnHeaders');
         $generator->expects(self::never())->method('applyColumnFormat');
@@ -56,18 +56,18 @@ class ExcelGeneratorTest extends TestCase
             ->setMaxColName('B')
             ->setColumns([
                 new ColumnSetting('foo'),
-                new ColumnSetting('bar')
-        ]);
+                new ColumnSetting('bar'),
+            ]);
 
         $generator = $this->getMockBuilder(ExcelGenerator::class)
-                          ->setConstructorArgs([
-                              $spreadsheetType,
-                              $this->converter
-                          ])
-                          ->onlyMethods(['applyColumnHeaders', 'applyColumnFormat', 'saveFile'])
-                          ->getMock();
-        $generator        ->expects(self::once())->method('applyColumnHeaders');
-        $generator        ->expects(self::once())->method('applyColumnFormat');
+            ->setConstructorArgs([
+                $spreadsheetType,
+                $this->converter,
+            ])
+            ->onlyMethods(['applyColumnHeaders', 'applyColumnFormat', 'saveFile'])
+            ->getMock();
+        $generator->expects(self::once())->method('applyColumnHeaders');
+        $generator->expects(self::once())->method('applyColumnFormat');
 
         $generator->generateSpreadsheet('url');
     }
@@ -80,18 +80,18 @@ class ExcelGeneratorTest extends TestCase
         $spreadsheetType->setColumns([new ColumnSetting('foo')]);
 
         $generator = $this->getMockBuilder(ExcelGenerator::class)
-                          ->setConstructorArgs([
-                                $spreadsheetType,
-                                $this->converter
-                          ])
-                          ->onlyMethods([
-                              'applyHeaderStyle',
-                              'applyStyle',
-                              'saveFile',
-                              'applyColumnHeaders',
-                              'applyColumnFormat'
-                          ])
-                          ->getMock();
+            ->setConstructorArgs([
+                $spreadsheetType,
+                $this->converter,
+            ])
+            ->onlyMethods([
+                'applyHeaderStyle',
+                'applyStyle',
+                'saveFile',
+                'applyColumnHeaders',
+                'applyColumnFormat',
+            ])
+            ->getMock();
         $generator->expects(self::once())->method('applyHeaderStyle');
         $generator->expects(self::once())->method('applyStyle');
 
@@ -102,13 +102,13 @@ class ExcelGeneratorTest extends TestCase
     {
         $spreadsheetType = new SpreadSheetType();
         $spreadsheetType->setColumns([new ColumnSetting('foo')])
-                        ->setContent(['content']);
+            ->setContent(['content']);
         $spreadsheetType->setMaxColName('A');
 
         $generator = $this->getMockBuilder(ExcelGenerator::class)
             ->setConstructorArgs([
                 $spreadsheetType,
-                $this->converter
+                $this->converter,
             ])
             ->onlyMethods([
                 'applyColumnHeaders',
@@ -123,27 +123,35 @@ class ExcelGeneratorTest extends TestCase
 
     public function testGenerateSpreadSheetApplyingAll(): void
     {
+        $col = $this->createMock(ColumnDimension::class);
+        $col->expects(self::once())->method('setAutoSize');
+        $sheet = $this->createMock(Worksheet::class);
+        $sheet->method('getColumnDimensions')->willReturn([$col]);
+        $spreadsheet = $this->createMock(Spreadsheet::class);
+        $spreadsheet->method('getActiveSheet')->willReturn($sheet);
+
         $spreadsheetType = new SpreadSheetType();
         $spreadsheetType
             ->setColumns([new ColumnSetting('')])
             ->setMaxColName('A')
             ->setStyle(new TableStyle())
-            ->setContent(['content']);
+            ->setContent(['content'])
+            ->setSpreadsheet($spreadsheet);
 
         $generator = $this->getMockBuilder(ExcelGenerator::class)
-                          ->setConstructorArgs([
-                              $spreadsheetType,
-                              $this->converter
-                          ])
-                          ->onlyMethods([
-                              'applyColumnHeaders',
-                              'applyColumnFormat',
-                              'applyHeaderStyle',
-                              'applyStyle',
-                              'applyContent',
-                              'saveFile'
-                          ])
-                          ->getMock();
+            ->setConstructorArgs([
+                $spreadsheetType,
+                $this->converter,
+            ])
+            ->onlyMethods([
+                'applyColumnHeaders',
+                'applyColumnFormat',
+                'applyHeaderStyle',
+                'applyStyle',
+                'applyContent',
+                'saveFile',
+            ])
+            ->getMock();
         $generator->expects(self::once())->method('applyColumnHeaders');
         $generator->expects(self::once())->method('applyColumnFormat');
         $generator->expects(self::once())->method('applyHeaderStyle');
@@ -157,7 +165,7 @@ class ExcelGeneratorTest extends TestCase
     {
         $this->expectException(\ArgumentCountError::class);
 
-        $generator = new ExcelGenerator(new SpreadSheetType());
+        $generator = new ExcelGenerator();
         $generator->generateSpreadsheet();
     }
 
@@ -188,9 +196,14 @@ class ExcelGeneratorTest extends TestCase
         );
 
         $generator->saveFile();
+        $timestamp = substr((string)time(), 0, -1);
+        $pattern = sys_get_temp_dir()."/spreadsheet ".$timestamp."*";
+        //in case that the second changes between write and read, look for file that is 10 seconds older
+        $fallBackPattern = sys_get_temp_dir()."/spreadsheet ".($timestamp - 1)."*";
+        $file = glob($pattern)[0] ?? glob($fallBackPattern)[0];
 
-        self::assertFileExists(sys_get_temp_dir() .'/spreadsheet.xlsx', 'file should have been created');
-        unlink(sys_get_temp_dir() . '/spreadsheet.xlsx');
+        self::assertFileExists($file, 'file should have been created in '.sys_get_temp_dir());
+        unlink($file);
     }
 
     public function testApplyContentWithEntity(): void
@@ -201,40 +214,40 @@ class ExcelGeneratorTest extends TestCase
 
         $columns = [
             (new ColumnSetting('foo'))->setName('A'),
-            (new ColumnSetting('foo'))->setName('B')
+            (new ColumnSetting('foo'))->setName('B'),
         ];
 
         $worksheet = $this->getMockBuilder(Worksheet::class)
-            ->onlyMethods(['setCellValue'])
+            ->onlyMethods(['setCellValueExplicit'])
             ->getMock();
 
         $this->spreadsheetType = $this->getMockBuilder(SpreadSheetType::class)
-                                    ->onlyMethods([
-                                        'getColumns',
-                                        'getContentStartRow',
-                                        'getSheet'
-                                    ])
-                                    ->getMock();
+            ->onlyMethods([
+                'getColumns',
+                'getContentStartRow',
+                'getSheet',
+            ])
+            ->getMock();
         $this->spreadsheetType->method('getColumns')->willReturn($columns);
         $this->spreadsheetType->method('getContentStartRow')->willReturn(2);
         $this->spreadsheetType->method('getSheet')->willReturn($worksheet);
 
         $worksheet->expects(self::exactly(2))
-                  ->method('setCellValue')
-                  ->withConsecutive(
-                      ['A2', 'foo'],
-                      ['B2', 'bar']
-                  );
+            ->method('setCellValueExplicit')
+            ->withConsecutive(
+                ['A2', 'foo'],
+                ['B2', 'bar']
+            );
 
         $converter = $this->getMockBuilder(DataConverter::class)
-                            ->disableOriginalConstructor()
-                            ->onlyMethods(['convertEntityToArray'])
-                            ->getMock();
+            ->disableOriginalConstructor()
+            ->onlyMethods(['convertEntityToArray'])
+            ->getMock();
         $converter
             ->expects(self::once())
             ->method('convertEntityToArray')
             ->with($content, $columns)
-            ->willReturn([['foo','bar']]);
+            ->willReturn([['foo', 'bar']]);
 
         $generator = new ExcelGenerator(
             $this->spreadsheetType,
@@ -255,13 +268,13 @@ class ExcelGeneratorTest extends TestCase
 
         $sheet = $this->createMock(Worksheet::class);
         $sheet->expects(self::once())
-              ->method('setCellValue')
-              ->with('A0', 'foo');
+            ->method('setCellValue')
+            ->with('A0', 'foo');
         $spreadsheetType = $this->createMock(SpreadSheetType::class);
         $spreadsheetType->method('getSheet')
-                        ->willReturn($sheet);
+            ->willReturn($sheet);
         $spreadsheetType->method('getColumns')
-                        ->willReturn($cols);
+            ->willReturn($cols);
 
         $generator = new ExcelGenerator(
             $spreadsheetType,
@@ -278,34 +291,26 @@ class ExcelGeneratorTest extends TestCase
 
         $sheetStyle = $this->createMock(Style::class);
         $sheetStyle
-            ->expects(self::exactly(2))
+            ->expects(self::once())
             ->method('applyFromArray')
-            ->withConsecutive(
-                [[
-                    'borders' => [
-                        'allBorders' => [
-                            'borderStyle' => Border::BORDER_THIN,
-                            'color'       => ['argb' => 'FFF0000'],
-                        ],
-                    ],
-                ]],
-                [['data style']]
+            ->with(
+                ['data style']
             )
             ->willReturn($sheetStyle);
 
         $sheet = $this->getMockBuilder(Worksheet::class)
-                      ->disableOriginalConstructor()
-                      ->onlyMethods(['getStyle'])
-                      ->getMock();
-        $sheet        ->method('getStyle')
-                      ->willReturn($sheetStyle);
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getStyle'])
+            ->getMock();
+        $sheet->method('getStyle')
+            ->willReturn($sheetStyle);
         $spreadsheetType = $this->getMockBuilder(SpreadSheetType::class)
-                                ->onlyMethods(['getSheet'])
-                                ->getMock();
-        $spreadsheetType        ->method('getSheet')
-                                ->willReturn($sheet);
-        $spreadsheetType        ->setMaxColName('C')
-                                ->setMaxRowNumber(100);
+            ->onlyMethods(['getSheet'])
+            ->getMock();
+        $spreadsheetType->method('getSheet')
+            ->willReturn($sheet);
+        $spreadsheetType->setMaxColName('C')
+            ->setMaxRowNumber(100);
 
         $generator = new ExcelGenerator(
             $spreadsheetType
@@ -328,7 +333,7 @@ class ExcelGeneratorTest extends TestCase
 
         $columns = [
             new ColumnSetting('foo'),
-            new ColumnSetting('bar')
+            new ColumnSetting('bar'),
         ];
 
         $generator = new ExcelGenerator(
@@ -357,17 +362,18 @@ class ExcelGeneratorTest extends TestCase
         $sheetStyle = $this->createMock(Style::class);
         $sheetStyle->method('applyFromArray')->willReturn($sheetStyle);
         $sheetStyle->expects(self::exactly(2))
-                    ->method('applyFromArray');
+            ->method('applyFromArray');
 
         $sheet = $this->createMock(Worksheet::class);
-        $sheet        ->expects(self::exactly(3))
-                      ->method('mergeCells')
-                      ->withConsecutive(['A1:A2'], ['B1:B2'], ['C1:C2']);
+        $sheet->expects(self::exactly(3))
+            ->method('mergeCells')
+            ->withConsecutive(['A1:A2'], ['B1:B2'], ['C1:C2']);
         $sheet->method('getStyle')
-              ->willReturn($sheetStyle);
+            ->willReturn($sheetStyle);
 
         $this->spreadsheetType->method('getSheet')->willReturn($sheet);
         $this->spreadsheetType->method('getMaxColName')->willReturn('C');
+        $this->spreadsheetType->method('getColumns')->willReturn(['A', 'B', 'C']);
 
         $generator = new ExcelGenerator(
             $this->spreadsheetType
@@ -375,7 +381,7 @@ class ExcelGeneratorTest extends TestCase
 
         $style = new TableStyle();
         $style->setHeaderRowHeight(2)
-              ->setHeaderStyle([]);
+            ->setHeaderStyle([]);
 
         $generator->applyHeaderStyle($style);
     }
@@ -404,7 +410,7 @@ class ExcelGeneratorTest extends TestCase
         $columns = [
             new ColumnSetting('First'),
             new ColumnSetting('Sec'),
-            new ColumnSetting('Thrd')
+            new ColumnSetting('Thrd'),
         ];
 
         $this->spreadsheetType->expects(self::once())
@@ -425,8 +431,8 @@ class ExcelGeneratorTest extends TestCase
 
         $style = new TableStyle();
         $this->spreadsheetType->expects(self::once())
-             ->method('setStyle')
-             ->with($style);
+            ->method('setStyle')
+            ->with($style);
 
         $generator->setStyle($style);
     }
@@ -448,18 +454,18 @@ class ExcelGeneratorTest extends TestCase
     public function testApplyColumnFormatNoNumberFormat(): void
     {
         $columns = [
-            (new ColumnSetting('heading', ColumnSetting::FORMAT_INTEGER))->setName('A')
+            (new ColumnSetting('heading', ColumnSetting::FORMAT_INTEGER))->setName('A'),
         ];
 
         $style = $this->createMock(Style::class);
         $style->expects(self::once())->method('applyFromArray')
             ->with([
                 'alignment' => [
-                    'vertical' => Alignment::HORIZONTAL_RIGHT,
+                    'horizontal' => Alignment::HORIZONTAL_RIGHT,
                 ],
                 'numberFormat' => [
-                    'formatCode' => NumberFormat::FORMAT_NUMBER
-                ]
+                    'formatCode' => NumberFormat::FORMAT_NUMBER,
+                ],
             ]);
 
         $sheet = $this->createMock(Worksheet::class);
@@ -474,5 +480,4 @@ class ExcelGeneratorTest extends TestCase
 
         $generator->applyColumnFormat($columns);
     }
-
 }

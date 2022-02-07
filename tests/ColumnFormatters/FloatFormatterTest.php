@@ -17,7 +17,7 @@ class FloatFormatterTest extends TestCase
         $column = new ColumnSetting('foo', ColumnSetting::FORMAT_FLOAT, null, 3);
         $formatter = new FloatFormatter($column);
 
-        self::assertEquals(['vertical' => Alignment::HORIZONTAL_RIGHT], $formatter->getAlignment(), 'alignment');
+        self::assertEquals(['horizontal' => Alignment::HORIZONTAL_RIGHT], $formatter->getAlignment(), 'alignment');
         self::assertEquals(['formatCode' => 0.000], $formatter->getNumberFormat(), 'number format');
     }
 }
