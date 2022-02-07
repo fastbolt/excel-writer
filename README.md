@@ -188,7 +188,7 @@ The following styles are presets, but can be overwritten in the TableStyle class
         ->generateSpreadsheet('../var/temp/filename');
 
     //download
-    $response = new BinaryFileResponse($file->getPath());
+    $response = new BinaryFileResponse($file->getPathname());
     $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
     return $response;
 ```
