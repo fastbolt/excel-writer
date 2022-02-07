@@ -3,6 +3,7 @@
 namespace Fastbolt\ExcelWriter;
 
 use Fastbolt\ExcelWriter\ColumnFormatter\StringFormatter;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -44,7 +45,7 @@ class ExcelGenerator
     {
         $this->spreadsheetType->setColumns($columns);
 
-        $colName = $this->letterProvider->getLetterForNumber(count($columns));
+        $colName = Coordinate::stringFromColumnIndex(count($columns));
         $this->spreadsheetType->setMaxColName($colName);
 
         return $this;
@@ -205,8 +206,10 @@ class ExcelGenerator
     {
         $sheet       = $this->spreadsheetType->getSheet();
         $headerCount = count($columns);
-        $last        = $this->letterProvider->getLetterForNumber($headerCount);
-        $letters     = range('A', $last);
+        $letters  = range(1, $headerCount);
+        array_walk($letters, static function (&$index) {
+            $index = Coordinate::stringFromColumnIndex($index);
+        });
 
         for ($counter = 0; $counter < $headerCount; $counter++) {
             $sheet->setCellValue($letters[$counter] . '1', $columns[$counter]->getHeader());
@@ -257,7 +260,11 @@ class ExcelGenerator
 
         //merging header row
         if ($style->getHeaderRowHeight() > 1) {
-            $cols = range('A', $this->spreadsheetType->getMaxColName());
+            $cols = range(1, count($this->spreadsheetType->getColumns()));
+            array_walk($cols, static function (&$index) {
+                $index = Coordinate::stringFromColumnIndex($index);
+            });
+
             foreach ($cols as $col) {
                 $firstCell = $col . '1';
                 $lastCell  = $col . $style->getHeaderRowHeight();
