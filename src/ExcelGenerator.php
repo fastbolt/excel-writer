@@ -15,18 +15,15 @@ use SplFileInfo;
 class ExcelGenerator
 {
     //TODO set the apply... and save functions to private, adapt tests
-    private LetterProvider  $letterProvider;
     private SpreadSheetType $spreadsheetType;
     private DataConverter $converter;
 
     public function __construct(
         SpreadSheetType $spreadsheetType,
-        ?DataConverter $converter = null,
-        ?LetterProvider $letterProvider = null
+        ?DataConverter $converter = null
     ) {
         $this->spreadsheetType  = $spreadsheetType;
         $this->converter        = $converter ?? new DataConverter();
-        $this->letterProvider   = $letterProvider ?? new LetterProvider();
     }
 
     public function setSpreadsheet(Spreadsheet $spreadsheet): ExcelGenerator

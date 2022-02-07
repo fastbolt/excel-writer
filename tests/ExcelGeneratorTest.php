@@ -5,7 +5,6 @@ namespace Fastbolt\ExcelWriter\Tests;
 use Fastbolt\ExcelWriter\ColumnSetting;
 use Fastbolt\ExcelWriter\DataConverter;
 use Fastbolt\ExcelWriter\ExcelGenerator;
-use Fastbolt\ExcelWriter\LetterProvider;
 use Fastbolt\ExcelWriter\SpreadSheetType;
 use Fastbolt\ExcelWriter\TableStyle;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -19,26 +18,22 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \Fastbolt\ExcelWriter\ExcelGenerator
  * @uses \Fastbolt\ExcelWriter\DataConverter
- * @uses \Fastbolt\ExcelWriter\LetterProvider
  * @uses \Fastbolt\ExcelWriter\SpreadSheetType
  * @uses \Fastbolt\ExcelWriter\TableStyle
  */
 class ExcelGeneratorTest extends TestCase
 {
     private $spreadsheetType;
-    private $letterProvider;
     private $converter;
     private array $mockedDependencies;
 
     public function setUp(): void
     {
         $this->spreadsheetType = $this->createMock(SpreadSheetType::class);
-        $this->letterProvider = $this->createMock(LetterProvider::class);
         $this->converter = $this->createMock(DataConverter::class);
         $this->mockedDependencies = [
             $this->spreadsheetType,
-            $this->converter,
-            $this->letterProvider
+            $this->converter
         ];
     }
 
@@ -70,8 +65,7 @@ class ExcelGeneratorTest extends TestCase
         $generator = $this->getMockBuilder(ExcelGenerator::class)
                           ->setConstructorArgs([
                               $spreadsheetType,
-                              $this->converter,
-                              $this->letterProvider
+                              $this->converter
                           ])
                           ->onlyMethods(['applyColumnHeaders', 'applyColumnFormat', 'saveFile'])
                           ->getMock();
@@ -91,8 +85,7 @@ class ExcelGeneratorTest extends TestCase
         $generator = $this->getMockBuilder(ExcelGenerator::class)
                           ->setConstructorArgs([
                                 $spreadsheetType,
-                                $this->converter,
-                                $this->letterProvider
+                                $this->converter
                           ])
                           ->onlyMethods([
                               'applyHeaderStyle',
@@ -118,8 +111,7 @@ class ExcelGeneratorTest extends TestCase
         $generator = $this->getMockBuilder(ExcelGenerator::class)
             ->setConstructorArgs([
                 $spreadsheetType,
-                $this->converter,
-                $this->letterProvider
+                $this->converter
             ])
             ->onlyMethods([
                 'applyColumnHeaders',
@@ -144,8 +136,7 @@ class ExcelGeneratorTest extends TestCase
         $generator = $this->getMockBuilder(ExcelGenerator::class)
                           ->setConstructorArgs([
                               $spreadsheetType,
-                              $this->converter,
-                              $this->letterProvider
+                              $this->converter
                           ])
                           ->onlyMethods([
                               'applyColumnHeaders',
@@ -180,8 +171,7 @@ class ExcelGeneratorTest extends TestCase
 
         $generator = new ExcelGenerator(
             $this->spreadsheetType,
-            $this->converter,
-            $this->letterProvider
+            $this->converter
         );
 
         $generator->saveFile('../test.xlsx');
@@ -197,8 +187,7 @@ class ExcelGeneratorTest extends TestCase
 
         $generator = new ExcelGenerator(
             $this->spreadsheetType,
-            $this->converter,
-            $this->letterProvider
+            $this->converter
         );
 
         $generator->saveFile();
