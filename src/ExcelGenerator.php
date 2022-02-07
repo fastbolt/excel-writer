@@ -19,11 +19,11 @@ class ExcelGenerator
     private DataConverter $converter;
 
     public function __construct(
-        SpreadSheetType $spreadsheetType,
+        ?SpreadSheetType $spreadsheetType = null,
         ?DataConverter $converter = null
     ) {
-        $this->spreadsheetType  = $spreadsheetType;
-        $this->converter        = $converter ?? new DataConverter();
+        $this->spreadsheetType  = $spreadsheetType ?? new SpreadSheetType();
+        $this->converter        = $converter       ?? new DataConverter();
     }
 
     public function setSpreadsheet(Spreadsheet $spreadsheet): ExcelGenerator
