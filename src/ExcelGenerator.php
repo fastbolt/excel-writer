@@ -101,10 +101,9 @@ class ExcelGenerator
         $sheet->setAutoFilter($sheet->calculateWorksheetDimension());
 
         //auto size
-        $maxCol = $this->spreadsheetType->getMaxColName();
-        foreach (range('A', $maxCol) as $column) {
-            $sheet->getColumnDimension($column)
-                ->setAutoSize(true);
+        $dimensions = $sheet->getColumnDimensions();
+        foreach ($dimensions as $col) {
+            $col->setAutoSize(true);
         }
 
         return $this->saveFile($url);
