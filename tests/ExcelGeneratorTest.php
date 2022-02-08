@@ -11,6 +11,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Style\Style;
+use PhpOffice\PhpSpreadsheet\Worksheet\AutoFilter;
 use PhpOffice\PhpSpreadsheet\Worksheet\ColumnDimension;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PHPUnit\Framework\TestCase;
@@ -123,12 +124,16 @@ class ExcelGeneratorTest extends TestCase
 
     public function testGenerateSpreadSheetApplyingAll(): void
     {
-        $col = $this->createMock(ColumnDimension::class);
-        $col->expects(self::once())->method('setAutoSize');
-        $sheet = $this->createMock(Worksheet::class);
-        $sheet->method('getColumnDimensions')->willReturn([$col]);
+        $col         = $this->createMock(ColumnDimension::class);
+        $sheet       = $this->createMock(Worksheet::class);
         $spreadsheet = $this->createMock(Spreadsheet::class);
+        $autoFilter  = $this->createMock(AutoFilter::class);
+        $col        ->expects(self::once())->method('setAutoSize');
+        $sheet      ->method('getColumnDimensions')->willReturn([$col]);
+        $sheet      ->method('getAutoFilter')->willReturn($autoFilter);
         $spreadsheet->method('getActiveSheet')->willReturn($sheet);
+        $autoFilter ->expects(self::once())->method('setRange')
+                                           ->with("B1:C14");
 
         $spreadsheetType = new SpreadSheetType();
         $spreadsheetType
@@ -136,7 +141,8 @@ class ExcelGeneratorTest extends TestCase
             ->setMaxColName('A')
             ->setStyle(new TableStyle())
             ->setContent(['content'])
-            ->setSpreadsheet($spreadsheet);
+            ->setSpreadsheet($spreadsheet)
+            ->setAutoFilterRange("B1:C14");
 
         $generator = $this->getMockBuilder(ExcelGenerator::class)
             ->setConstructorArgs([
@@ -449,6 +455,19 @@ class ExcelGeneratorTest extends TestCase
             ->with($content);
 
         $generator->setContent($content);
+    }
+
+    public function testSetAutoFilterRange(): void
+    {
+        $generator = new ExcelGenerator(
+            $this->spreadsheetType
+        );
+
+        $this->spreadsheetType->expects(self::once())
+            ->method('setAutoFilterRange')
+            ->with($range = "foo");
+
+        $generator->setAutoFilterRange($range);
     }
 
     public function testApplyColumnFormatNoNumberFormat(): void

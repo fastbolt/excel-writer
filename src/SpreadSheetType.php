@@ -10,8 +10,6 @@ class SpreadSheetType
 {
     private Spreadsheet $spreadsheet;
 
-    private DataConverter $converter;
-
     private string $maxColName = '';
 
     private int $maxRowNumber = 0;
@@ -27,15 +25,13 @@ class SpreadSheetType
 
     private TableStyle $style;
 
-    /** @var string[] */
-    private array $autoFilterCols = [];
+    private string $autoFilterRange = '';
 
     public function __construct()
     {
         $this->spreadsheet = new Spreadsheet();
         $this->spreadsheet->createSheet();
         $this->style = new TableStyle();
-        $this->converter = new DataConverter();
     }
 
     /**
@@ -187,49 +183,25 @@ class SpreadSheetType
     }
 
     /**
-     * @param array $cols           columns to set auto filter at
+     * @param string $range
      * @return SpreadSheetType
      */
-    public function setAutoFilterCols(array $cols): SpreadSheetType
+    public function setAutoFilterRange(string $range): SpreadSheetType
     {
-        foreach ($cols as &$col) {
-            if (getType($col) === "integer") {
-                $col = Coordinate::stringFromColumnIndex($col);
-            }
+        if (!Coordinate::coordinateIsRange($range)) {
+            throw new \InvalidArgumentException('Method setAutoFilterRange() must be passed a range');
         }
-        unset($col);
 
-        $this->autoFilterCols = $this->converter->sortColumns($cols);
-        return $this;
-    }
-
-    /**
-     * @param array $cols
-     * @return $this
-     */
-    public function addAutoFilterCols(array $cols): SpreadSheetType
-    {
-        foreach ($cols as $col) {
-            if (getType($col) === "integer") {
-                $col = Coordinate::stringFromColumnIndex($col);
-            }
-
-            if (in_array($col, $this->autoFilterCols, false)) {
-                continue;
-            }
-
-            $this->autoFilterCols[] = $col;
-        }
-        $this->autoFilterCols = $this->converter->sortColumns($this->autoFilterCols);
+        $this->autoFilterRange = $range;
 
         return $this;
     }
 
     /**
-     * @return string[]
+     * @return string
      */
-    public function getAutoFilterCols(): array
+    public function getAutoFilterRange(): string
     {
-        return $this->autoFilterCols;
+        return $this->autoFilterRange;
     }
 }

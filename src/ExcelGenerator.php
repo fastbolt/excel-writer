@@ -2,6 +2,7 @@
 
 namespace Fastbolt\ExcelWriter;
 
+use ArgumentCountError;
 use Fastbolt\ExcelWriter\ColumnFormatter\StringFormatter;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
@@ -45,14 +46,6 @@ class ExcelGenerator
         $maxColName = Coordinate::stringFromColumnIndex(count($columns));
         $this->spreadsheetType->setMaxColName($maxColName);
 
-        $filterCols = [];
-        foreach ($columns as $col) {
-            if ($col->isAutoFilter()) {
-                $filterCols[] = $col->getName();
-            }
-        }
-        $this->spreadsheetType->addAutoFilterCols($filterCols);
-
         return $this;
     }
 
@@ -73,13 +66,12 @@ class ExcelGenerator
     }
 
     /**
-     * @param string[] $columns
+     * @param string $range
      * @return $this
      */
-    public function setAutoFilter(array $columns): ExcelGenerator
+    public function setAutoFilterRange(string $range): ExcelGenerator
     {
-        //TODO: issue #6 accept ranges
-        $this->spreadsheetType->setAutoFilterCols($columns);
+        $this->spreadsheetType->setAutoFilterRange($range);
 
         return $this;
     }
@@ -101,7 +93,7 @@ class ExcelGenerator
             ->setContentStartRow($headerRowHeight + 1);
 
         if (count($this->spreadsheetType->getColumns()) === 0) {
-            throw new \ArgumentCountError('At least one column must be set.');
+            throw new ArgumentCountError('At least one column must be set.');
         }
 
         $this->applyColumnHeaders($this->spreadsheetType->getColumns());
@@ -116,9 +108,8 @@ class ExcelGenerator
 
         //auto filter
         $sheet = $this->spreadsheetType->getSheet();
-        $autoFilter = $sheet->getAutoFilter();
-        foreach ($this->spreadsheetType->getAutoFilterCols() as $col) {
-            $autoFilter->setColumn($col);
+        if ($this->spreadsheetType->getAutoFilterRange() !== '') {
+            $sheet->getAutoFilter()->setRange($this->spreadsheetType->getAutoFilterRange());
         }
 
         //auto size

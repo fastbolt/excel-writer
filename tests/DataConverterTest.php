@@ -89,12 +89,4 @@ class DataConverterTest extends TestCase
         self::assertEquals('foo', $result[0][0], 'not callable');
         self::assertEquals(100, $result[0][1], 'callable');
     }
-
-    public function testSortColumns(): void
-    {
-        $converter = new DataConverter();
-        $cols = ["A", "B", "AB", "D", "EG"];
-
-        self::assertEquals(["A", "B", "D", "AB", "EG"], $converter->sortColumns($cols), 'sort columns');
-    }
 }

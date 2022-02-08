@@ -5,6 +5,7 @@ namespace Fastbolt\ExcelWriter\Tests;
 use Fastbolt\ExcelWriter\ColumnSetting;
 use Fastbolt\ExcelWriter\SpreadSheetType;
 use Fastbolt\ExcelWriter\TableStyle;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PHPUnit\Framework\TestCase;
 
@@ -23,8 +24,7 @@ class SpreadSheetTypeTest extends TestCase
             ->setMaxColName('foo')
             ->setMaxRowNumber(200)
             ->setContentStartRow(100)
-            ->setAutoFilterCols([3, "H", 30])
-            ->addAutoFilterCols(["A", 2, 27]);
+            ->setAutoFilterRange('B2:R15');
 
         self::assertInstanceOf(TableStyle::class, $item->getStyle(), 'style');
         self::assertEquals('content', $item->getContent()[0], 'content');
@@ -34,6 +34,13 @@ class SpreadSheetTypeTest extends TestCase
         self::assertEquals('foo', $item->getMaxColName(), 'max col name');
         self::assertEquals(200, $item->getMaxRowNumber(), 'max row number');
         self::assertEquals(100, $item->getContentStartRow(), 'content start row');
-        self::assertEquals(["A", "B", "C", "H", "AA", "AD"], $item->getAutoFilterCols(), 'auto filter columns');
+        self::assertEquals('B2:R15', $item->getAutoFilterRange(), 'auto filter range');
+    }
+
+    public function testSetAutoFilterRangeNoRangeError(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $item = new SpreadSheetType();
+        $item->setAutoFilterRange('A');
     }
 }
