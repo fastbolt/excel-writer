@@ -323,7 +323,7 @@ class ExcelGenerator
                     'vertical'   => Alignment::VERTICAL_CENTER,
                     'horizontal' => Alignment::HORIZONTAL_CENTER,
                 ],
-                'borders'   => [
+                'borders' => [
                     'allBorders' => [
                         'borderStyle' => Border::BORDER_MEDIUM,
                         'color'       => ['argb' => 'FF366092'],
