@@ -42,8 +42,16 @@ class ExcelGenerator
     {
         $this->spreadsheetType->setColumns($columns);
 
-        $colName = Coordinate::stringFromColumnIndex(count($columns));
-        $this->spreadsheetType->setMaxColName($colName);
+        $maxColName = Coordinate::stringFromColumnIndex(count($columns));
+        $this->spreadsheetType->setMaxColName($maxColName);
+
+        $filterCols = [];
+        foreach ($columns as $col) {
+            if ($col->isAutoFilter()) {
+                $filterCols[] = $col->getName();
+            }
+        }
+        $this->spreadsheetType->addAutoFilterCols($filterCols);
 
         return $this;
     }
@@ -60,6 +68,18 @@ class ExcelGenerator
         $sheetType = $this->spreadsheetType;
 
         $sheetType->setContent($content);
+
+        return $this;
+    }
+
+    /**
+     * @param string[] $columns
+     * @return $this
+     */
+    public function setAutoFilter(array $columns): ExcelGenerator
+    {
+        //TODO: issue #6 accept ranges
+        $this->spreadsheetType->setAutoFilterCols($columns);
 
         return $this;
     }
@@ -96,7 +116,10 @@ class ExcelGenerator
 
         //auto filter
         $sheet = $this->spreadsheetType->getSheet();
-        $sheet->setAutoFilter($sheet->calculateWorksheetDimension());
+        $autoFilter = $sheet->getAutoFilter();
+        foreach ($this->spreadsheetType->getAutoFilterCols() as $col) {
+            $autoFilter->setColumn($col);
+        }
 
         //auto size
         $dimensions = $sheet->getColumnDimensions();

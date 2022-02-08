@@ -18,6 +18,7 @@ class ColumnSetting
     private string $format;
     private string $name = '';    //excel-name for the column
     private string $header;       //heading of the column
+    private bool $isAutoFilter;
 
     /**
      * @var callable|string name of the get method (like getId) or a callable taking the object an argument
@@ -36,11 +37,13 @@ class ColumnSetting
         string $header,
         string $format = self::FORMAT_STRING,
         $getter = '',
+        $isAutoFilter = false,
         int $decimalLength = 2
     ) {
         $this->header        = $header;
         $this->format        = $format;
         $this->getter        = $getter;
+        $this->isAutoFilter  = $isAutoFilter;
         $this->decimalLength = $decimalLength;
     }
 
@@ -143,10 +146,22 @@ class ColumnSetting
         return $this->decimalLength;
     }
 
-    public function setDecimalLength(int $count): self
+    public function setDecimalLength(int $count): ColumnSetting
     {
         $this->decimalLength = $count;
 
         return $this;
+    }
+
+    public function setAutoFilter(bool $filter): ColumnSetting
+    {
+        $this->isAutoFilter = $filter;
+
+        return $this;
+    }
+
+    public function isAutoFilter(): bool
+    {
+        return $this->isAutoFilter;
     }
 }
