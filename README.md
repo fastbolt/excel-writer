@@ -63,6 +63,31 @@ Create an instance of the TableStyle class and set styles for the header row and
         ->generateSpreadsheet('../var/temp/filename');
 ```
 
+To apply styles to individual columns, you can either pass the style arrays as the 5th (header style) and 6th (data style) argument to the constructor, or use the setter of the ColumnSettings class.
+```php
+     $headerStyle = [
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'color' => array('rgb' => 'FF6622')
+            ]
+    ];
+    $dataStyle = [
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'color' => array('rgb' => '22DD33')
+            )
+    ];
+   
+   //using the constructor
+   $column = new ColumnSetting("By Constructor", ColumnSetting::FORMAT_STRING, '', 0, $headerStyle, $dataStyle);
+   
+    //using the setters 
+    $column = new ColumnSetting("Styled Column", ColumnSetting::FORMAT_STRING);
+    $column->setHeaderStyle($headerStyle)
+           ->setDataStyle($dataStyle);
+```
+
+
 ## Autofilter
 Autofilters can be set by calling the generator's setter method and passing a range:
 ```php
