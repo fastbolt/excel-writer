@@ -2,12 +2,15 @@
 
 namespace Fastbolt\ExcelWriter;
 
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class SpreadSheetType
 {
     private Spreadsheet $spreadsheet;
+
+    private DataConverter $converter;
 
     private string $maxColName = '';
 
@@ -24,11 +27,15 @@ class SpreadSheetType
 
     private TableStyle $style;
 
+    /** @var string[] */
+    private array $autoFilterCols = [];
+
     public function __construct()
     {
         $this->spreadsheet = new Spreadsheet();
         $this->spreadsheet->createSheet();
         $this->style = new TableStyle();
+        $this->converter = new DataConverter();
     }
 
     /**
@@ -177,5 +184,52 @@ class SpreadSheetType
         $this->columns = $columns;
 
         return $this;
+    }
+
+    /**
+     * @param array $cols           columns to set auto filter at
+     * @return SpreadSheetType
+     */
+    public function setAutoFilterCols(array $cols): SpreadSheetType
+    {
+        foreach ($cols as &$col) {
+            if (getType($col) === "integer") {
+                $col = Coordinate::stringFromColumnIndex($col);
+            }
+        }
+        unset($col);
+
+        $this->autoFilterCols = $this->converter->sortColumns($cols);
+        return $this;
+    }
+
+    /**
+     * @param array $cols
+     * @return $this
+     */
+    public function addAutoFilterCols(array $cols): SpreadSheetType
+    {
+        foreach ($cols as $col) {
+            if (getType($col) === "integer") {
+                $col = Coordinate::stringFromColumnIndex($col);
+            }
+
+            if (in_array($col, $this->autoFilterCols, false)) {
+                continue;
+            }
+
+            $this->autoFilterCols[] = $col;
+        }
+        $this->autoFilterCols = $this->converter->sortColumns($this->autoFilterCols);
+
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAutoFilterCols(): array
+    {
+        return $this->autoFilterCols;
     }
 }

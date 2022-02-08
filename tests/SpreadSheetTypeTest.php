@@ -22,7 +22,9 @@ class SpreadSheetTypeTest extends TestCase
             ->setSpreadsheet($spreadsheet = new Spreadsheet())
             ->setMaxColName('foo')
             ->setMaxRowNumber(200)
-            ->setContentStartRow(100);
+            ->setContentStartRow(100)
+            ->setAutoFilterCols([3, "H", 30])
+            ->addAutoFilterCols(["A", 2, 27]);
 
         self::assertInstanceOf(TableStyle::class, $item->getStyle(), 'style');
         self::assertEquals('content', $item->getContent()[0], 'content');
@@ -32,5 +34,6 @@ class SpreadSheetTypeTest extends TestCase
         self::assertEquals('foo', $item->getMaxColName(), 'max col name');
         self::assertEquals(200, $item->getMaxRowNumber(), 'max row number');
         self::assertEquals(100, $item->getContentStartRow(), 'content start row');
+        self::assertEquals(["A", "B", "C", "H", "AA", "AD"], $item->getAutoFilterCols(), 'auto filter columns');
     }
 }
