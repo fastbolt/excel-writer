@@ -24,11 +24,15 @@ class ColumnSettingTest extends TestCase
         $column->setName('foo')
                ->setGetter('foobar')
                ->setHeader('barfoo')
-               ->setDecimalLength(5);
+               ->setDecimalLength(5)
+               ->setHeaderStyle(['hs'])
+               ->setDataStyle(['ds']);
         self::assertEquals('foo', $column->getName(), 'get name');
         self::assertEquals('foobar', $column->getGetter(), 'get getterName');
         self::assertEquals('barfoo', $column->getHeader(), 'get header');
         self::assertEquals(5, $column->getDecimalLength(), 'decimal length');
+        self::assertEquals(['hs'], $column->getHeaderStyle(), 'header style');
+        self::assertEquals(['ds'], $column->getDataStyle(), 'data style');
 
         $column->setGetter(static function () {
             return 'ham';
