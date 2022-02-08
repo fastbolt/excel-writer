@@ -19,12 +19,14 @@ class ColumnSetting
     private string $name = '';    //excel-name for the column
     private string $header;       //heading of the column
 
-    /**
-     * @var callable|string name of the get method (like getId) or a callable taking the object an argument
-     */
+    private int $decimalLength;
+
+    private ?array $headerStyle;
+    private ?array $dataStyle;
+
+    /** @var callable|string name of the get method (like getId) or a callable taking the object an argument */
     private $getter;
 
-    private int $decimalLength;
 
     /**
      * @param string          $header               column header
@@ -36,12 +38,16 @@ class ColumnSetting
         string $header,
         string $format = self::FORMAT_STRING,
         $getter = '',
-        int $decimalLength = 2
+        int $decimalLength = 2,
+        $headerStyle = null,
+        $dataStyle = null
     ) {
-        $this->header        = $header;
-        $this->format        = $format;
-        $this->getter        = $getter;
-        $this->decimalLength = $decimalLength;
+        $this->header           = $header;
+        $this->format           = $format;
+        $this->getter           = $getter;
+        $this->decimalLength    = $decimalLength;
+        $this->headerStyle      = $headerStyle;
+        $this->dataStyle        = $dataStyle;
     }
 
     /**
@@ -143,10 +149,53 @@ class ColumnSetting
         return $this->decimalLength;
     }
 
+    /**
+     * @param int $count
+     * @return $this
+     */
     public function setDecimalLength(int $count): ColumnSetting
     {
         $this->decimalLength = $count;
 
         return $this;
+    }
+
+    /**
+     * @param array|null $style
+     * @return ColumnSetting
+     */
+    public function setHeaderStyle(?array $style): ColumnSetting
+    {
+        $this->headerStyle = $style;
+
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getHeaderStyle(): ?array
+    {
+        return $this->headerStyle;
+    }
+
+
+    /**
+     * @param array|null $style
+     * @return ColumnSetting
+     */
+    public function setDataStyle(?array $style): ColumnSetting
+    {
+        $this->dataStyle = $style;
+
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getDataStyle(): ?array
+    {
+        return $this->dataStyle;
     }
 }

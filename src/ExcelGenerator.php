@@ -104,7 +104,8 @@ class ExcelGenerator
             $this->applyContent($this->spreadsheetType->getContent());
         }
 
-        $this->applyStyle($this->spreadsheetType->getStyle());
+        $this->applyTableStyle($this->spreadsheetType->getStyle());
+        $this->applyColumnStyle();
 
         //auto filter
         $sheet = $this->spreadsheetType->getSheet();
@@ -192,10 +193,8 @@ class ExcelGenerator
      *
      * @return ExcelGenerator
      */
-    public function applyStyle(TableStyle $style): ExcelGenerator
+    public function applyTableStyle(TableStyle $style): ExcelGenerator
     {
-        //this should probably be made coordinate / item specific
-
         //set data row style
         $headerHeight     = $style->getHeaderRowHeight();
         $firstContentCell = 'A' . (1 + $headerHeight);
@@ -204,6 +203,37 @@ class ExcelGenerator
         $this->spreadsheetType->getSheet()
             ->getStyle($firstContentCell . ':' . $lastContentCell)
             ->applyFromArray($style->getDataRowStyle());
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function applyColumnStyle(): ExcelGenerator
+    {
+        $spreadsheetType = $this->spreadsheetType;
+        $columns         = $spreadsheetType->getColumns();
+        $contentStartRow = $spreadsheetType->getContentStartRow();
+        $headerHeight    = $spreadsheetType->getStyle()->getHeaderRowHeight();
+
+        foreach ($columns as $col) {
+            $colName = $col->getName();
+
+            //header style
+            if ($col->getHeaderStyle() !== null) {
+                $spreadsheetType->getSheet()->getStyle(
+                    $colName . "1:" . $colName . $headerHeight
+                )->applyFromArray($col->getHeaderStyle());
+            }
+
+            //data row style
+            if ($col->getDataStyle() !== null) {
+                $spreadsheetType->getSheet()->getStyle(
+                    $colName . $contentStartRow . ':'. $colName . $spreadsheetType->getMaxRowNumber()
+                )->applyFromArray($col->getDataStyle());
+            }
+        }
 
         return $this;
     }

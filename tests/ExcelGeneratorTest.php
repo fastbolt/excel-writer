@@ -289,7 +289,7 @@ class ExcelGeneratorTest extends TestCase
         $generator->applyContent($content);
     }
 
-    public function testApplyStyle(): void
+    public function testApplyTableStyle(): void
     {
         $style = (new TableStyle())
             ->setHeaderRowHeight(100)
@@ -322,7 +322,7 @@ class ExcelGeneratorTest extends TestCase
             $spreadsheetType
         );
 
-        $generator->applyStyle($style);
+        $generator->applyTableStyle($style);
     }
 
     public function testApplyColumnHeaders(): void
