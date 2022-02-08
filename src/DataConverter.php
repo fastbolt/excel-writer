@@ -79,4 +79,20 @@ class DataConverter
 
         return $data;
     }
+
+    /**
+     * Sorts alphabetical column names the way they appear in the Excel sheet
+     *
+     * @param array $columns
+     * @return array
+     */
+    public function sortColumns(array $columns): array
+    {
+        sort($columns);
+        usort($columns, static function ($a, $b) {
+            return strlen($a) <=> strlen($b);
+        });
+
+        return $columns;
+    }
 }
