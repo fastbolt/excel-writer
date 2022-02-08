@@ -63,17 +63,17 @@ Create an instance of the TableStyle class and set styles for the header row and
         ->generateSpreadsheet('../var/temp/filename');
 ```
 
-##Autofilter
+## Autofilter
 Autofilters can be set by calling the generator's setter method and passing a range:
 ```php
     $generator->setAutoFilterRange("A1:R14");
 ```
 
 
-##Style presets
+## Style presets
 The following styles are presets, but can be overwritten in the TableStyle class
 
-###header
+### header
 - borders: medium
 - vertical-alignment: center
 - horizontal-alignment: center
