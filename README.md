@@ -1,13 +1,13 @@
 # Excel-Writer
-This component is used for simple Excel-file generation in Symfony. You can pass either arrays of arrays, or arrays of entities to the generator class. If an entity references another entity, you will need to pass a static function to retrieve a specific value from that entity.
+This component is used for simple Excel-file generation in Symfony. You can pass either arrays of arrays, or arrays of entities to the generator class. If an entity references another entity as it's attribute, you will need to pass a callable to retrieve a specific value from that entity.
 
 ## Table size
 The width of the table is set by the number of headers. The number of rows is set by the amount of data.
 
 ## Columns
 The order of columns is determined by the order of ColumnSetting instances given to ExcelGenerator::setColumns().
-You need to define at least one Column.
-The order of the content will not be changed if arrays are passed to setContent().
+You need to define at least one column.
+The order of the content will not be changed if an array is passed to setContent().
 
 If you are passing objects to setContent(), you will need to provide the name of the method that returns
 the values you want to display (like "getName").
@@ -172,7 +172,7 @@ The following styles are presets, but can be overwritten in the TableStyle class
     $repo  = $this->getDoctrine()->getRepository(User::class);
     $users = $repo->findBy(['client' => 5]);
 
-    //define columns matching the order of the data
+    //define columns
     $columns = [
         new ColumnSetting('Login', ColumnSetting::FORMAT_INTEGER, 'getLoginName'),
         new ColumnSetting('Country', ColumnSetting::FORMAT_STRING, static function($user) {
