@@ -130,6 +130,9 @@ class ExcelGenerator
             $col->setAutoSize(true);
         }
 
+        //TODO test for execution
+        $this->applyMergedCells();
+
         return $this->saveFile($url);
     }
 
@@ -344,5 +347,21 @@ class ExcelGenerator
             ->applyFromArray($style->getHeaderStyle());
 
         return $this;
+    }
+
+    /**
+     * Merges previously set cells in the worksheet
+     *
+     * @return void
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+    public function applyMergedCells(): void
+    {
+        $sheet       = $this->spreadsheetType->getSheet();
+        $mergedCells = $this->spreadsheetType->getMergedCells();
+
+        foreach ($mergedCells as $cells) {
+            $sheet->mergeCells($cells);
+        }
     }
 }
