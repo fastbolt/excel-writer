@@ -361,7 +361,8 @@ class ExcelGenerator
         $mergedCells = $this->spreadsheetType->getMergedCells();
 
         foreach ($mergedCells as $cells) {
-            $sheet->mergeCells($cells);
+            $sheet->mergeCells($cells)
+                  ->getStyle($cells)->getAlignment()->setHorizontal('center');
         }
     }
 }
