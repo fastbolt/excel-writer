@@ -104,6 +104,14 @@ The following styles are presets, but can be overwritten in the TableStyle class
 - horizontal-alignment: center
 - color: FF366092 (blue)
 
+## Merging Cells
+You can merge cells by passing an array of coordinate ranges to the generator 'mergeCells'-method.
+The content of the resulting cell will be centered. Calling the method multiple times will not overwrite previous merges.
+```php
+$generator->mergeCells(['A1:B4'])
+          ->mergeCells(['P4:T4', 'S1:T1'])
+```
+
 ## Hints
 * Floats have a preset decimal length of 2 (0.12), but that can be configured with the 4th parameter of the ColumnSetting constructor or its method setDecimalLength().
 * PHP and Excel have problems working with large numbers. Pass numbers with 16+ digits as strings to string columns to display them correctly.
