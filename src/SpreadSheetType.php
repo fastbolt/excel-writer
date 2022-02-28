@@ -27,6 +27,8 @@ class SpreadSheetType
 
     private string $autoFilterRange = '';
 
+    private array $mergedCells = [];
+
     public function __construct()
     {
         $this->spreadsheet = new Spreadsheet();
@@ -203,5 +205,37 @@ class SpreadSheetType
     public function getAutoFilterRange(): string
     {
         return $this->autoFilterRange;
+    }
+
+    /**
+     * @param array $mergedCells
+     * @return SpreadSheetType
+     */
+    public function setMergedCells(array $mergedCells): SpreadSheetType
+    {
+        $this->mergedCells = $mergedCells;
+
+        return $this;
+    }
+
+    /**
+     * @param string[] $mergedCells
+     * @return SpreadSheetType
+     */
+    public function addMergedCells(array $mergedCells): SpreadSheetType
+    {
+        foreach ($mergedCells as $cells) {
+            $this->mergedCells[] = $cells;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMergedCells(): array
+    {
+        return $this->mergedCells;
     }
 }

@@ -77,6 +77,17 @@ class ExcelGenerator
     }
 
     /**
+     * @param array $cells
+     * @return ExcelGenerator
+     */
+    public function mergeCells(array $cells): ExcelGenerator
+    {
+        $this->spreadsheetType->addMergedCells($cells);
+
+        return $this;
+    }
+
+    /**
      * Generates a spreadsheet with a single sheet/table, using the previously set options
      *
      * @param string $url the path to where the file is supposed to be saved to (includes filename)

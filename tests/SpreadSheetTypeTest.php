@@ -43,4 +43,13 @@ class SpreadSheetTypeTest extends TestCase
         $item = new SpreadSheetType();
         $item->setAutoFilterRange('A');
     }
+
+    public function testSetAndAddMergeCells(): void
+    {
+        $item = new SpreadSheetType();
+        $item->setMergedCells(['foo', 'bar'])
+             ->addMergedCells(['ham', 'eggs']);
+
+        self::assertEquals(['foo', 'bar', 'ham', 'eggs'], $item->getMergedCells(), 'merged cells');
+    }
 }

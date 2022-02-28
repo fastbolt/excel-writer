@@ -592,6 +592,17 @@ class ExcelGeneratorTest extends TestCase
         $generator->setAutoFilterRange($range);
     }
 
+    public function testMergeCells(): void
+    {
+        $generator = new ExcelGenerator(
+            $this->spreadsheetType
+        );
+
+        $this->spreadsheetType->expects(self::once())
+                              ->method('addMergedCells');
+        $generator->mergeCells(['foo']);
+    }
+
     public function testApplyColumnFormatNoNumberFormat(): void
     {
         $columns = [
