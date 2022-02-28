@@ -160,6 +160,7 @@ class ExcelGeneratorTest extends TestCase
                 'applyColumnStyle',
                 'applyContent',
                 'saveFile',
+                'applyMergedCells'
             ])
             ->getMock();
         $generator->expects(self::once())->method('applyColumnHeaders');
@@ -169,6 +170,7 @@ class ExcelGeneratorTest extends TestCase
         $generator->expects(self::once())->method('applyTableStyle');
         $generator->expects(self::once())->method('applyColumnStyle');
         $generator->expects(self::once())->method('saveFile');
+        $generator->expects(self::once())->method('applyMergedCells');
         $generator->generateSpreadsheet('url');
     }
 
@@ -631,5 +633,32 @@ class ExcelGeneratorTest extends TestCase
         );
 
         $generator->applyColumnFormat($columns);
+    }
+
+    public function testApplyMergedCells(): void
+    {
+        $spreadsheetType = new SpreadSheetType();
+        $generator       = new ExcelGenerator($spreadsheetType);
+        $spreadsheet     = $this->createMock(Spreadsheet::class);
+        $sheet           = $this->getMockBuilder(Worksheet::class)
+                                ->onlyMethods(['mergeCells', 'getStyle'])
+                                ->addMethods(['getAlignment', 'setHorizontal'])
+                                ->getMock();
+        $sheet->method('getAlignment')->willReturn($sheet);
+
+        $spreadsheetType->setSpreadsheet($spreadsheet)
+                        ->setMergedCells(['foo', 'bah', 'ham']);
+        $spreadsheet->method('getActiveSheet')->willReturn($sheet);
+
+        $sheet->expects(self::exactly(3))
+              ->method('mergeCells')
+              ->withConsecutive(['foo'], ['bah'], ['ham'])
+              ->willReturn($sheet);
+        $sheet->expects(self::exactly(3))
+              ->method('getStyle')
+              ->withConsecutive(['foo'], ['bah'], ['ham'])
+              ->willReturn($sheet);
+
+        $generator->applyMergedCells();
     }
 }

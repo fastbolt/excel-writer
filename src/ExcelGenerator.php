@@ -130,7 +130,6 @@ class ExcelGenerator
             $col->setAutoSize(true);
         }
 
-        //TODO test for execution
         $this->applyMergedCells();
 
         return $this->saveFile($url);
