@@ -132,7 +132,12 @@ class ExcelGenerator
 
         $this->applyMergedCells();
 
-        return $this->saveFile($url);
+        $file = $this->saveFile($url);
+
+        //reset sheet to avoid leftover data when called multiple times
+        $this->spreadsheetType->setSpreadsheet(new Spreadsheet());
+
+        return $file;
     }
 
     /**
