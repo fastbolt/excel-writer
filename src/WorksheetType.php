@@ -8,7 +8,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class WorksheetType
 {
-    private Spreadsheet $spreadsheet;
+    private Worksheet $worksheet;
 
     private string $maxColName = '';
 
@@ -29,19 +29,9 @@ class WorksheetType
 
     private array $mergedCells = [];
 
-    public function __construct()
+    public function __construct(Spreadsheet $spreadsheet)
     {
-        $this->spreadsheet = new Spreadsheet();
-        $this->spreadsheet->createSheet();
         $this->style = new TableStyle();
-    }
-
-    /**
-     * @return Worksheet
-     */
-    public function getSheet(): Worksheet
-    {
-        return $this->spreadsheet->getActiveSheet();
     }
 
     /**
@@ -63,6 +53,7 @@ class WorksheetType
 
         return $this;
     }
+
 
     /**
      * @return string
@@ -237,5 +228,21 @@ class WorksheetType
     public function getMergedCells(): array
     {
         return $this->mergedCells;
+    }
+
+    /**
+     * @return Worksheet
+     */
+    public function getWorksheet(): Worksheet
+    {
+        return $this->worksheet;
+    }
+
+    /**
+     * @param Worksheet $worksheet
+     */
+    public function setWorksheet(Worksheet $worksheet): void
+    {
+        $this->worksheet = $worksheet;
     }
 }

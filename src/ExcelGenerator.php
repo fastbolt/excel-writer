@@ -16,7 +16,15 @@ use SplFileInfo;
 class ExcelGenerator
 {
     //TODO set the apply... and save functions to private, adapt tests
-    private WorksheetType $worksheetType;
+
+    private Spreadsheet $spreadsheet;
+
+    private ?WorksheetType $worksheetType;
+
+    /**
+     * @var WorksheetType[] $worksheetTypes
+     */
+    private array $worksheetTypes = [];
     private DataConverter $converter;
 
     public function __construct(
@@ -24,13 +32,14 @@ class ExcelGenerator
         ?DataConverter $converter = null
     )
     {
-        $this->worksheetType = $worksheetType ?? new WorksheetType();
+        $this->spreadsheet = new Spreadsheet();
+        $this->worksheetType = $worksheetType ?? new WorksheetType($this->spreadsheet);
         $this->converter = $converter ?? new DataConverter();
     }
 
     public function setSpreadsheet(Spreadsheet $spreadsheet): ExcelGenerator
     {
-        $this->worksheetType->setSpreadsheet($spreadsheet);
+        $this->spreadsheet = $spreadsheet;
 
         return $this;
     }
@@ -88,9 +97,16 @@ class ExcelGenerator
         return $this;
     }
 
+    public function nextWorksheet(): self
+    {
+        $this->worksheetType = new WorksheetType($this->spreadsheet);
+
+        $this->worksheetTypes[] = $this->worksheetType;
+
+        return $this;
+    }
+
     /**
-     * Generates a spreadsheet with a single sheet/table, using the previously set options
-     *
      * @param string $url the path to where the file is supposed to be saved to (includes filename)
      *
      * @return SplFileInfo
@@ -99,44 +115,48 @@ class ExcelGenerator
      */
     public function generateSpreadsheet(string $url = ''): SplFileInfo
     {
-        $headerRowHeight = $this->worksheetType->getStyle()->getHeaderRowHeight();
-        $this->worksheetType
-            ->setMaxRowNumber(count($this->worksheetType->getContent()) + $headerRowHeight)
-            ->setContentStartRow($headerRowHeight + 1);
+        $this->worksheetType = null; //all worksheets should be in worksheet array
 
-        if (count($this->worksheetType->getColumns()) === 0) {
-            throw new ArgumentCountError('At least one column must be set.');
+        $i = 0;
+        foreach ($this->spreadsheet->getWorksheetIterator() as $worksheet) {
+            $worksheetType = $this->worksheetTypes[$i];
+            $worksheetType->setWorksheet($worksheet);
+            $headerRowHeight = $worksheetType->getStyle()->getHeaderRowHeight();
+            $worksheetType
+                ->setMaxRowNumber(count($worksheetType->getContent()) + $headerRowHeight)
+                ->setContentStartRow($headerRowHeight + 1);
+
+            if (count($worksheetType->getColumns()) === 0) {
+                throw new ArgumentCountError('At least one column must be set.');
+            }
+
+            $this->applyColumnHeaders($worksheetType->getColumns());
+            $this->applyColumnFormat($worksheetType->getColumns());
+            $this->applyHeaderStyle($worksheetType->getStyle());
+
+            if ($worksheetType->getContent()) {
+                $this->applyContent($worksheetType->getContent());
+            }
+
+            $this->applyTableStyle($worksheetType->getStyle());
+            $this->applyColumnStyle();
+
+            //auto filter
+            $sheet = $this->spreadsheet->getActiveSheet();
+            if ($worksheetType->getAutoFilterRange() !== '') {
+                $sheet->getAutoFilter()->setRange($worksheetType->getAutoFilterRange());
+            }
+
+            //auto size
+            $dimensions = $sheet->getColumnDimensions();
+            foreach ($dimensions as $col) {
+                $col->setAutoSize(true);
+            }
+
+            $this->applyMergedCells();
         }
-
-        $this->applyColumnHeaders($this->worksheetType->getColumns());
-        $this->applyColumnFormat($this->worksheetType->getColumns());
-        $this->applyHeaderStyle($this->worksheetType->getStyle());
-
-        if ($this->worksheetType->getContent()) {
-            $this->applyContent($this->worksheetType->getContent());
-        }
-
-        $this->applyTableStyle($this->worksheetType->getStyle());
-        $this->applyColumnStyle();
-
-        //auto filter
-        $sheet = $this->worksheetType->getSheet();
-        if ($this->worksheetType->getAutoFilterRange() !== '') {
-            $sheet->getAutoFilter()->setRange($this->worksheetType->getAutoFilterRange());
-        }
-
-        //auto size
-        $dimensions = $sheet->getColumnDimensions();
-        foreach ($dimensions as $col) {
-            $col->setAutoSize(true);
-        }
-
-        $this->applyMergedCells();
 
         $file = $this->saveFile($url);
-
-        //reset sheet to avoid leftover data when called multiple times
-        $this->worksheetType->setSpreadsheet(new Spreadsheet());
 
         return $file;
     }
@@ -264,7 +284,7 @@ class ExcelGenerator
      */
     public function applyColumnHeaders(array $columns): ExcelGenerator
     {
-        $sheet = $this->worksheetType->getSheet();
+        $sheet = $this->worksheetType->getWorksheet();
         $headerCount = count($columns);
         $letters = range(1, $headerCount);
         array_walk($letters, static function (&$index) {
@@ -284,7 +304,7 @@ class ExcelGenerator
      */
     public function applyColumnFormat(array $columns): void
     {
-        $sheet = $this->worksheetType->getSheet();
+        $sheet = $this->worksheetType->getWorksheet();
 
         foreach ($columns as $column) {
             $format = [];
@@ -312,7 +332,7 @@ class ExcelGenerator
      */
     public function applyHeaderStyle(TableStyle $style): ExcelGenerator
     {
-        $sheet = $this->worksheetType->getSheet();
+        $sheet = $this->worksheetType->getWorksheet();
 
         if ($style->getHeaderRowHeight() < 1) {
             return $this;
@@ -362,7 +382,7 @@ class ExcelGenerator
      */
     public function applyMergedCells(): void
     {
-        $sheet = $this->worksheetType->getSheet();
+        $sheet = $this->worksheetType->getWorksheet();
         $mergedCells = $this->worksheetType->getMergedCells();
 
         foreach ($mergedCells as $cells) {
