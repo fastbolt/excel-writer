@@ -182,6 +182,19 @@ $generator->mergeCells(['A1:B4'])
         ->generateSpreadsheet('../var/temp/filename');
 ```
 
+### Multiple worksheets
+
+```php
+    foreach ($userGroups as $userGroup) {
+        $excelGenerator
+                    ->setTitle($userGroup->getName())
+                    ->setContent($userGroup)
+                    ->setColumns($columns)
+                    ->nextWorksheet();
+    }
+    $excelGenerator->generateSpreadsheet('../var/temp/filename');
+```
+
 ### Full example using objects and adding style
 ```php
     $repo  = $this->getDoctrine()->getRepository(User::class);
