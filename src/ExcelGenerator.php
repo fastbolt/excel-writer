@@ -2,7 +2,6 @@
 
 namespace Fastbolt\ExcelWriter;
 
-use ArgumentCountError;
 use Fastbolt\ExcelWriter\ColumnFormatter\StringFormatter;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
@@ -18,8 +17,6 @@ class ExcelGenerator
     //TODO set the apply... and save functions to private, adapt tests
 
     private Spreadsheet $spreadsheet;
-
-    private ?WorksheetType $worksheetType;
 
     /**
      * @var WorksheetType[] $worksheetTypes
@@ -99,6 +96,7 @@ class ExcelGenerator
 
     public function nextWorksheet(): self
     {
+
         $this->worksheetType = new WorksheetType($this->spreadsheet);
 
         $this->worksheetTypes[] = $this->worksheetType;
@@ -115,46 +113,46 @@ class ExcelGenerator
      */
     public function generateSpreadsheet(string $url = ''): SplFileInfo
     {
-        $this->nextWorksheet();
+//        $this->nextWorksheet();
         $this->worksheetType = null; //all worksheets should be in worksheet array
 
         $i = 0;
         foreach ($this->spreadsheet->getWorksheetIterator() as $worksheet) {
-            $worksheetType = $this->worksheetTypes[$i];
-            $worksheetType->setWorksheet($worksheet);
-            $headerRowHeight = $worksheetType->getStyle()->getHeaderRowHeight();
-            $worksheetType
-                ->setMaxRowNumber(count($worksheetType->getContent()) + $headerRowHeight)
-                ->setContentStartRow($headerRowHeight + 1);
-
-            if (count($worksheetType->getColumns()) === 0) {
-                throw new ArgumentCountError('At least one column must be set.');
-            }
-
-            $this->applyColumnHeaders($worksheetType->getColumns());
-            $this->applyColumnFormat($worksheetType->getColumns());
-            $this->applyHeaderStyle($worksheetType->getStyle());
-
-            if ($worksheetType->getContent()) {
-                $this->applyContent($worksheetType->getContent());
-            }
-
-            $this->applyTableStyle($worksheetType->getStyle());
-            $this->applyColumnStyle();
-
-            //auto filter
-            $sheet = $this->spreadsheet->getActiveSheet();
-            if ($worksheetType->getAutoFilterRange() !== '') {
-                $sheet->getAutoFilter()->setRange($worksheetType->getAutoFilterRange());
-            }
-
-            //auto size
-            $dimensions = $sheet->getColumnDimensions();
-            foreach ($dimensions as $col) {
-                $col->setAutoSize(true);
-            }
-
-            $this->applyMergedCells();
+            $this->worksheetType = $this->worksheetTypes[$i];
+            $this->worksheetType->setWorksheet($worksheet);
+//            $headerRowHeight = $this->worksheetType->getStyle()->getHeaderRowHeight();
+//            $this->worksheetType
+//                ->setMaxRowNumber(count($this->worksheetType->getContent()) + $headerRowHeight)
+//                ->setContentStartRow($headerRowHeight + 1);
+//
+//            if (count($this->worksheetType->getColumns()) === 0) {
+//                throw new ArgumentCountError('At least one column must be set.');
+//            }
+//
+//            $this->applyColumnHeaders($this->worksheetType);
+//            $this->applyColumnFormat($this->worksheetType);
+//            $this->applyHeaderStyle($this->worksheetType);
+//
+//            if ($this->worksheetType->getContent()) {
+//                $this->applyContent($this->worksheetType->getContent());
+//            }
+//
+//            $this->applyTableStyle($this->worksheetType->getStyle());
+//            $this->applyColumnStyle();
+//
+//            //auto filter
+//            $sheet = $this->spreadsheet->getActiveSheet();
+//            if ($this->worksheetType->getAutoFilterRange() !== '') {
+//                $sheet->getAutoFilter()->setRange($this->worksheetType->getAutoFilterRange());
+//            }
+//
+//            //auto size
+//            $dimensions = $sheet->getColumnDimensions();
+//            foreach ($dimensions as $col) {
+//                $col->setAutoSize(true);
+//            }
+//
+//            $this->applyMergedCells();
         }
 
         $file = $this->saveFile($url);
@@ -240,7 +238,7 @@ class ExcelGenerator
         $firstContentCell = 'A' . (1 + $headerHeight);
         $lastContentCell = $this->worksheetType->getMaxColName() . $this->worksheetType->getMaxRowNumber();
 
-        $this->worksheetType->getSheet()
+        $this->worksheetType->getWorksheet()
             ->getStyle($firstContentCell . ':' . $lastContentCell)
             ->applyFromArray($style->getDataRowStyle());
 
@@ -252,25 +250,25 @@ class ExcelGenerator
      */
     public function applyColumnStyle(): ExcelGenerator
     {
-        $worksheetType = $this->worksheetType;
-        $columns = $worksheetType->getColumns();
-        $contentStartRow = $worksheetType->getContentStartRow();
-        $headerHeight = $worksheetType->getStyle()->getHeaderRowHeight();
+        $this->worksheetType = $this->worksheetType;
+        $columns = $this->worksheetType->getColumns();
+        $contentStartRow = $this->worksheetType->getContentStartRow();
+        $headerHeight = $this->worksheetType->getStyle()->getHeaderRowHeight();
 
         foreach ($columns as $col) {
             $colName = $col->getName();
 
             //header style
             if ($col->getHeaderStyle() !== null) {
-                $worksheetType->getSheet()->getStyle(
+                $this->worksheetType->getWorksheet()->getStyle(
                     $colName . "1:" . $colName . $headerHeight
                 )->applyFromArray($col->getHeaderStyle());
             }
 
             //data row style
             if ($col->getDataStyle() !== null) {
-                $worksheetType->getSheet()->getStyle(
-                    $colName . $contentStartRow . ':' . $colName . $worksheetType->getMaxRowNumber()
+                $this->worksheetType->getWorksheet()->getStyle(
+                    $colName . $contentStartRow . ':' . $colName . $this->worksheetType->getMaxRowNumber()
                 )->applyFromArray($col->getDataStyle());
             }
         }
@@ -283,8 +281,9 @@ class ExcelGenerator
      *
      * @return ExcelGenerator
      */
-    public function applyColumnHeaders(array $columns): ExcelGenerator
+    public function applyColumnHeaders(): ExcelGenerator
     {
+        $columns = $this->worksheetType->getColumns();
         $sheet = $this->worksheetType->getWorksheet();
         $headerCount = count($columns);
         $letters = range(1, $headerCount);
@@ -303,8 +302,9 @@ class ExcelGenerator
     /**
      * @param ColumnSetting[] $columns
      */
-    public function applyColumnFormat(array $columns): void
+    public function applyColumnFormat(): void
     {
+        $columns = $this->worksheetType->getColumns();
         $sheet = $this->worksheetType->getWorksheet();
 
         foreach ($columns as $column) {
@@ -326,13 +326,12 @@ class ExcelGenerator
     }
 
     /**
-     * @param TableStyle $style
      *
      * @return ExcelGenerator
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    public function applyHeaderStyle(TableStyle $style): ExcelGenerator
+    public function applyHeaderStyle(): ExcelGenerator
     {
+        $style = $this->worksheetType->getStyle();
         $sheet = $this->worksheetType->getWorksheet();
 
         if ($style->getHeaderRowHeight() < 1) {
