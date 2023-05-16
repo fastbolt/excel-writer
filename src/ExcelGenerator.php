@@ -2,6 +2,7 @@
 
 namespace Fastbolt\ExcelWriter;
 
+use ArgumentCountError;
 use Fastbolt\ExcelWriter\ColumnFormatter\StringFormatter;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
@@ -104,10 +105,9 @@ class ExcelGenerator
 
     public function nextWorksheet(): self
     {
+        $this->worksheetTypes[] = $this->worksheetType;
 
         $this->worksheetType = new WorksheetType($this->spreadsheet);
-
-        $this->worksheetTypes[] = $this->worksheetType;
 
         return $this;
     }
@@ -122,16 +122,16 @@ class ExcelGenerator
     public function generateSpreadsheet(string $url = ''): SplFileInfo
     {
         if (count($this->worksheetType->getColumns()) !== 0) {
-            $this->nextWorksheet();
+            $this->worksheetTypes[] = $this->worksheetType;
         }
         $this->worksheetType = null; //all worksheets should be in worksheet array now
 
-        $this->spreadsheet->removeSheetByIndex(0);
+        $this->spreadsheet->removeSheetByIndex(0); //remove empty preset sheet
         foreach ($this->worksheetTypes as $index => $this->worksheetType) {
-            $worksheet = new Worksheet();
+            $worksheet = new Worksheet($this->spreadsheet, $this->worksheetType->getTitle());
+            $this->spreadsheet->addSheet($worksheet, $index);
 
             $this->worksheetType->setWorksheet($worksheet);
-            $worksheet->setTitle($this->worksheetType->getTitle());
             $headerRowHeight = $this->worksheetType->getStyle()->getHeaderRowHeight();
             $this->worksheetType
                 ->setMaxRowNumber(count($this->worksheetType->getContent()) + $headerRowHeight)
@@ -164,8 +164,6 @@ class ExcelGenerator
             }
 
             $this->applyMergedCells();
-
-            $this->spreadsheet->addSheet($worksheet);
         }
 
         $file = $this->saveFile($url);
