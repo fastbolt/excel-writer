@@ -10,6 +10,8 @@ class WorksheetType
 {
     private Worksheet $worksheet;
 
+    private $title = 'Worksheet';
+
     private string $maxColName = '';
 
     private int $maxRowNumber = 0;
@@ -31,6 +33,7 @@ class WorksheetType
 
     public function __construct(Spreadsheet $spreadsheet)
     {
+        $this->setSpreadsheet($spreadsheet);
         $this->style = new TableStyle();
     }
 
@@ -244,5 +247,21 @@ class WorksheetType
     public function setWorksheet(Worksheet $worksheet): void
     {
         $this->worksheet = $worksheet;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
     }
 }

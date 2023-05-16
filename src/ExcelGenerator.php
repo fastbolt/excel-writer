@@ -120,6 +120,7 @@ class ExcelGenerator
         foreach ($this->spreadsheet->getWorksheetIterator() as $worksheet) {
             $this->worksheetType = $this->worksheetTypes[$i];
             $this->worksheetType->setWorksheet($worksheet);
+            $worksheet->setTitle($this->worksheetType->getTitle());
 //            $headerRowHeight = $this->worksheetType->getStyle()->getHeaderRowHeight();
 //            $this->worksheetType
 //                ->setMaxRowNumber(count($this->worksheetType->getContent()) + $headerRowHeight)
@@ -176,7 +177,7 @@ class ExcelGenerator
             $url .= '.xlsx';
         }
 
-        $writer = new Xlsx($this->worksheetType->getSpreadsheet());
+        $writer = new Xlsx($this->spreadsheet);
         $writer->save($url);
 
         return new SplFileInfo($url);
@@ -190,7 +191,7 @@ class ExcelGenerator
      */
     public function applyContent(array $content): ExcelGenerator
     {
-        $sheet = $this->worksheetType->getSheet();
+        $sheet = $this->worksheetType->getWorksheet();
         $cols = $this->worksheetType->getColumns();
         $currentRow = $this->worksheetType->getContentStartRow();
         $colCount = count($cols);
@@ -227,12 +228,12 @@ class ExcelGenerator
     }
 
     /**
-     * @param TableStyle $style
-     *
      * @return ExcelGenerator
      */
-    public function applyTableStyle(TableStyle $style): ExcelGenerator
+    public function applyTableStyle(): ExcelGenerator
     {
+        $style = $this->worksheetType->getStyle();
+
         //set data row style
         $headerHeight = $style->getHeaderRowHeight();
         $firstContentCell = 'A' . (1 + $headerHeight);
@@ -250,7 +251,6 @@ class ExcelGenerator
      */
     public function applyColumnStyle(): ExcelGenerator
     {
-        $this->worksheetType = $this->worksheetType;
         $columns = $this->worksheetType->getColumns();
         $contentStartRow = $this->worksheetType->getContentStartRow();
         $headerHeight = $this->worksheetType->getStyle()->getHeaderRowHeight();
@@ -277,8 +277,6 @@ class ExcelGenerator
     }
 
     /**
-     * @param ColumnSetting[] $columns
-     *
      * @return ExcelGenerator
      */
     public function applyColumnHeaders(): ExcelGenerator
