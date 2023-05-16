@@ -6,9 +6,11 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class SpreadSheetType
+class WorksheetType
 {
-    private Spreadsheet $spreadsheet;
+    private Worksheet $worksheet;
+
+    private $title = 'Worksheet';
 
     private string $maxColName = '';
 
@@ -29,19 +31,10 @@ class SpreadSheetType
 
     private array $mergedCells = [];
 
-    public function __construct()
+    public function __construct(Spreadsheet $spreadsheet)
     {
-        $this->spreadsheet = new Spreadsheet();
-        $this->spreadsheet->createSheet();
+        $this->setSpreadsheet($spreadsheet);
         $this->style = new TableStyle();
-    }
-
-    /**
-     * @return Worksheet
-     */
-    public function getSheet(): Worksheet
-    {
-        return $this->spreadsheet->getActiveSheet();
     }
 
     /**
@@ -55,14 +48,15 @@ class SpreadSheetType
     /**
      * @param Spreadsheet $spreadsheet
      *
-     * @return SpreadSheetType
+     * @return WorksheetType
      */
-    public function setSpreadsheet(Spreadsheet $spreadsheet): SpreadSheetType
+    public function setSpreadsheet(Spreadsheet $spreadsheet): WorksheetType
     {
         $this->spreadsheet = $spreadsheet;
 
         return $this;
     }
+
 
     /**
      * @return string
@@ -75,9 +69,9 @@ class SpreadSheetType
     /**
      * @param string $maxColName
      *
-     * @return SpreadSheetType
+     * @return WorksheetType
      */
-    public function setMaxColName(string $maxColName): SpreadSheetType
+    public function setMaxColName(string $maxColName): WorksheetType
     {
         $this->maxColName = $maxColName;
 
@@ -95,9 +89,9 @@ class SpreadSheetType
     /**
      * @param int $maxRowNumber
      *
-     * @return SpreadSheetType
+     * @return WorksheetType
      */
-    public function setMaxRowNumber(int $maxRowNumber): SpreadSheetType
+    public function setMaxRowNumber(int $maxRowNumber): WorksheetType
     {
         $this->maxRowNumber = $maxRowNumber;
 
@@ -115,9 +109,9 @@ class SpreadSheetType
     /**
      * @param int $contentStartRow
      *
-     * @return SpreadSheetType
+     * @return WorksheetType
      */
-    public function setContentStartRow(int $contentStartRow): SpreadSheetType
+    public function setContentStartRow(int $contentStartRow): WorksheetType
     {
         $this->contentStartRow = $contentStartRow;
 
@@ -135,9 +129,9 @@ class SpreadSheetType
     /**
      * @param array $content
      *
-     * @return SpreadSheetType
+     * @return WorksheetType
      */
-    public function setContent(array $content): SpreadSheetType
+    public function setContent(array $content): WorksheetType
     {
         $this->content = $content;
 
@@ -155,9 +149,9 @@ class SpreadSheetType
     /**
      * @param TableStyle $style
      *
-     * @return SpreadSheetType
+     * @return WorksheetType
      */
-    public function setStyle(TableStyle $style): SpreadSheetType
+    public function setStyle(TableStyle $style): WorksheetType
     {
         $this->style = $style;
 
@@ -175,9 +169,9 @@ class SpreadSheetType
     /**
      * @param ColumnSetting[] $columns
      *
-     * @return SpreadSheetType
+     * @return WorksheetType
      */
-    public function setColumns(array $columns): SpreadSheetType
+    public function setColumns(array $columns): WorksheetType
     {
         $this->columns = $columns;
 
@@ -186,9 +180,9 @@ class SpreadSheetType
 
     /**
      * @param string $range
-     * @return SpreadSheetType
+     * @return WorksheetType
      */
-    public function setAutoFilterRange(string $range): SpreadSheetType
+    public function setAutoFilterRange(string $range): WorksheetType
     {
         if (!Coordinate::coordinateIsRange($range)) {
             throw new \InvalidArgumentException('Method setAutoFilterRange() must be passed a range');
@@ -209,9 +203,9 @@ class SpreadSheetType
 
     /**
      * @param array $mergedCells
-     * @return SpreadSheetType
+     * @return WorksheetType
      */
-    public function setMergedCells(array $mergedCells): SpreadSheetType
+    public function setMergedCells(array $mergedCells): WorksheetType
     {
         $this->mergedCells = $mergedCells;
 
@@ -220,9 +214,9 @@ class SpreadSheetType
 
     /**
      * @param string[] $mergedCells
-     * @return SpreadSheetType
+     * @return WorksheetType
      */
-    public function addMergedCells(array $mergedCells): SpreadSheetType
+    public function addMergedCells(array $mergedCells): WorksheetType
     {
         foreach ($mergedCells as $cells) {
             $this->mergedCells[] = $cells;
@@ -237,5 +231,37 @@ class SpreadSheetType
     public function getMergedCells(): array
     {
         return $this->mergedCells;
+    }
+
+    /**
+     * @return Worksheet
+     */
+    public function getWorksheet(): Worksheet
+    {
+        return $this->worksheet;
+    }
+
+    /**
+     * @param Worksheet $worksheet
+     */
+    public function setWorksheet(Worksheet $worksheet): void
+    {
+        $this->worksheet = $worksheet;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
     }
 }
