@@ -3,20 +3,20 @@
 namespace Fastbolt\ExcelWriter\Tests;
 
 use Fastbolt\ExcelWriter\ColumnSetting;
-use Fastbolt\ExcelWriter\SpreadSheetType;
+use Fastbolt\ExcelWriter\WorksheetType;
 use Fastbolt\ExcelWriter\TableStyle;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Fastbolt\ExcelWriter\SpreadSheetType
+ * @covers \Fastbolt\ExcelWriter\WorksheetType
  */
 class SpreadSheetTypeTest extends TestCase
 {
     public function testSettersGetters(): void
     {
-        $item = new SpreadSheetType();
+        $item = new WorksheetType();
         $item->setStyle(new TableStyle())
             ->setContent(['content'])
             ->setColumns([new ColumnSetting('')])
@@ -40,13 +40,13 @@ class SpreadSheetTypeTest extends TestCase
     public function testSetAutoFilterRangeNoRangeError(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $item = new SpreadSheetType();
+        $item = new WorksheetType();
         $item->setAutoFilterRange('A');
     }
 
     public function testSetAndAddMergeCells(): void
     {
-        $item = new SpreadSheetType();
+        $item = new WorksheetType();
         $item->setMergedCells(['foo', 'bar'])
              ->addMergedCells(['ham', 'eggs']);
 

@@ -16,20 +16,21 @@ use SplFileInfo;
 class ExcelGenerator
 {
     //TODO set the apply... and save functions to private, adapt tests
-    private SpreadSheetType $spreadsheetType;
+    private WorksheetType $worksheetType;
     private DataConverter $converter;
 
     public function __construct(
-        ?SpreadSheetType $spreadsheetType = null,
+        ?WorksheetType $worksheetType = null,
         ?DataConverter $converter = null
-    ) {
-        $this->spreadsheetType  = $spreadsheetType ?? new SpreadSheetType();
-        $this->converter        = $converter       ?? new DataConverter();
+    )
+    {
+        $this->worksheetType = $worksheetType ?? new WorksheetType();
+        $this->converter = $converter ?? new DataConverter();
     }
 
     public function setSpreadsheet(Spreadsheet $spreadsheet): ExcelGenerator
     {
-        $this->spreadsheetType->setSpreadsheet($spreadsheet);
+        $this->worksheetType->setSpreadsheet($spreadsheet);
 
         return $this;
     }
@@ -41,24 +42,24 @@ class ExcelGenerator
      */
     public function setColumns(array $columns): ExcelGenerator
     {
-        $this->spreadsheetType->setColumns($columns);
+        $this->worksheetType->setColumns($columns);
 
         $maxColName = Coordinate::stringFromColumnIndex(count($columns));
-        $this->spreadsheetType->setMaxColName($maxColName);
+        $this->worksheetType->setMaxColName($maxColName);
 
         return $this;
     }
 
     public function setStyle(TableStyle $style): ExcelGenerator
     {
-        $this->spreadsheetType->setStyle($style);
+        $this->worksheetType->setStyle($style);
 
         return $this;
     }
 
     public function setContent(array $content): ExcelGenerator
     {
-        $sheetType = $this->spreadsheetType;
+        $sheetType = $this->worksheetType;
 
         $sheetType->setContent($content);
 
@@ -71,7 +72,7 @@ class ExcelGenerator
      */
     public function setAutoFilterRange(string $range): ExcelGenerator
     {
-        $this->spreadsheetType->setAutoFilterRange($range);
+        $this->worksheetType->setAutoFilterRange($range);
 
         return $this;
     }
@@ -82,7 +83,7 @@ class ExcelGenerator
      */
     public function mergeCells(array $cells): ExcelGenerator
     {
-        $this->spreadsheetType->addMergedCells($cells);
+        $this->worksheetType->addMergedCells($cells);
 
         return $this;
     }
@@ -98,30 +99,30 @@ class ExcelGenerator
      */
     public function generateSpreadsheet(string $url = ''): SplFileInfo
     {
-        $headerRowHeight = $this->spreadsheetType->getStyle()->getHeaderRowHeight();
-        $this->spreadsheetType
-            ->setMaxRowNumber(count($this->spreadsheetType->getContent()) + $headerRowHeight)
+        $headerRowHeight = $this->worksheetType->getStyle()->getHeaderRowHeight();
+        $this->worksheetType
+            ->setMaxRowNumber(count($this->worksheetType->getContent()) + $headerRowHeight)
             ->setContentStartRow($headerRowHeight + 1);
 
-        if (count($this->spreadsheetType->getColumns()) === 0) {
+        if (count($this->worksheetType->getColumns()) === 0) {
             throw new ArgumentCountError('At least one column must be set.');
         }
 
-        $this->applyColumnHeaders($this->spreadsheetType->getColumns());
-        $this->applyColumnFormat($this->spreadsheetType->getColumns());
-        $this->applyHeaderStyle($this->spreadsheetType->getStyle());
+        $this->applyColumnHeaders($this->worksheetType->getColumns());
+        $this->applyColumnFormat($this->worksheetType->getColumns());
+        $this->applyHeaderStyle($this->worksheetType->getStyle());
 
-        if ($this->spreadsheetType->getContent()) {
-            $this->applyContent($this->spreadsheetType->getContent());
+        if ($this->worksheetType->getContent()) {
+            $this->applyContent($this->worksheetType->getContent());
         }
 
-        $this->applyTableStyle($this->spreadsheetType->getStyle());
+        $this->applyTableStyle($this->worksheetType->getStyle());
         $this->applyColumnStyle();
 
         //auto filter
-        $sheet = $this->spreadsheetType->getSheet();
-        if ($this->spreadsheetType->getAutoFilterRange() !== '') {
-            $sheet->getAutoFilter()->setRange($this->spreadsheetType->getAutoFilterRange());
+        $sheet = $this->worksheetType->getSheet();
+        if ($this->worksheetType->getAutoFilterRange() !== '') {
+            $sheet->getAutoFilter()->setRange($this->worksheetType->getAutoFilterRange());
         }
 
         //auto size
@@ -135,7 +136,7 @@ class ExcelGenerator
         $file = $this->saveFile($url);
 
         //reset sheet to avoid leftover data when called multiple times
-        $this->spreadsheetType->setSpreadsheet(new Spreadsheet());
+        $this->worksheetType->setSpreadsheet(new Spreadsheet());
 
         return $file;
     }
@@ -156,7 +157,7 @@ class ExcelGenerator
             $url .= '.xlsx';
         }
 
-        $writer = new Xlsx($this->spreadsheetType->getSpreadsheet());
+        $writer = new Xlsx($this->worksheetType->getSpreadsheet());
         $writer->save($url);
 
         return new SplFileInfo($url);
@@ -170,10 +171,10 @@ class ExcelGenerator
      */
     public function applyContent(array $content): ExcelGenerator
     {
-        $sheet      = $this->spreadsheetType->getSheet();
-        $cols       = $this->spreadsheetType->getColumns();
-        $currentRow = $this->spreadsheetType->getContentStartRow();
-        $colCount   = count($cols);
+        $sheet = $this->worksheetType->getSheet();
+        $cols = $this->worksheetType->getColumns();
+        $currentRow = $this->worksheetType->getContentStartRow();
+        $colCount = count($cols);
 
         $content = array_values($content);
         if (getType($content[0]) === 'object') {
@@ -188,8 +189,8 @@ class ExcelGenerator
         foreach ($content as $itemRow) {
             $itemRow = array_values($itemRow);
             for ($counter = 0; $counter < $colCount; $counter++) {
-                $col         = $cols[$counter];
-                $colName     = $col->getName();
+                $col = $cols[$counter];
+                $colName = $col->getName();
                 $coordinates = $colName . $currentRow;
 
                 //makes sure long numbers marked as string are displayed correctly
@@ -214,11 +215,11 @@ class ExcelGenerator
     public function applyTableStyle(TableStyle $style): ExcelGenerator
     {
         //set data row style
-        $headerHeight     = $style->getHeaderRowHeight();
+        $headerHeight = $style->getHeaderRowHeight();
         $firstContentCell = 'A' . (1 + $headerHeight);
-        $lastContentCell  = $this->spreadsheetType->getMaxColName() . $this->spreadsheetType->getMaxRowNumber();
+        $lastContentCell = $this->worksheetType->getMaxColName() . $this->worksheetType->getMaxRowNumber();
 
-        $this->spreadsheetType->getSheet()
+        $this->worksheetType->getSheet()
             ->getStyle($firstContentCell . ':' . $lastContentCell)
             ->applyFromArray($style->getDataRowStyle());
 
@@ -230,25 +231,25 @@ class ExcelGenerator
      */
     public function applyColumnStyle(): ExcelGenerator
     {
-        $spreadsheetType = $this->spreadsheetType;
-        $columns         = $spreadsheetType->getColumns();
-        $contentStartRow = $spreadsheetType->getContentStartRow();
-        $headerHeight    = $spreadsheetType->getStyle()->getHeaderRowHeight();
+        $worksheetType = $this->worksheetType;
+        $columns = $worksheetType->getColumns();
+        $contentStartRow = $worksheetType->getContentStartRow();
+        $headerHeight = $worksheetType->getStyle()->getHeaderRowHeight();
 
         foreach ($columns as $col) {
             $colName = $col->getName();
 
             //header style
             if ($col->getHeaderStyle() !== null) {
-                $spreadsheetType->getSheet()->getStyle(
+                $worksheetType->getSheet()->getStyle(
                     $colName . "1:" . $colName . $headerHeight
                 )->applyFromArray($col->getHeaderStyle());
             }
 
             //data row style
             if ($col->getDataStyle() !== null) {
-                $spreadsheetType->getSheet()->getStyle(
-                    $colName . $contentStartRow . ':'. $colName . $spreadsheetType->getMaxRowNumber()
+                $worksheetType->getSheet()->getStyle(
+                    $colName . $contentStartRow . ':' . $colName . $worksheetType->getMaxRowNumber()
                 )->applyFromArray($col->getDataStyle());
             }
         }
@@ -263,9 +264,9 @@ class ExcelGenerator
      */
     public function applyColumnHeaders(array $columns): ExcelGenerator
     {
-        $sheet       = $this->spreadsheetType->getSheet();
+        $sheet = $this->worksheetType->getSheet();
         $headerCount = count($columns);
-        $letters  = range(1, $headerCount);
+        $letters = range(1, $headerCount);
         array_walk($letters, static function (&$index) {
             $index = Coordinate::stringFromColumnIndex($index);
         });
@@ -283,14 +284,14 @@ class ExcelGenerator
      */
     public function applyColumnFormat(array $columns): void
     {
-        $sheet = $this->spreadsheetType->getSheet();
+        $sheet = $this->worksheetType->getSheet();
 
         foreach ($columns as $column) {
             $format = [];
             $formatter = $column->getFormatter();
 
-            $align          = $formatter->getAlignment();
-            $numberFormat   = $formatter->getNumberFormat();
+            $align = $formatter->getAlignment();
+            $numberFormat = $formatter->getNumberFormat();
 
             $format['alignment'] = $align;
 
@@ -299,7 +300,7 @@ class ExcelGenerator
             }
 
             $sheet->getStyle($column->getName() . ':' . $column->getName())
-                  ->applyFromArray($format);
+                ->applyFromArray($format);
         }
     }
 
@@ -311,7 +312,7 @@ class ExcelGenerator
      */
     public function applyHeaderStyle(TableStyle $style): ExcelGenerator
     {
-        $sheet = $this->spreadsheetType->getSheet();
+        $sheet = $this->worksheetType->getSheet();
 
         if ($style->getHeaderRowHeight() < 1) {
             return $this;
@@ -319,32 +320,32 @@ class ExcelGenerator
 
         //merging header row
         if ($style->getHeaderRowHeight() > 1) {
-            $cols = range(1, count($this->spreadsheetType->getColumns()));
+            $cols = range(1, count($this->worksheetType->getColumns()));
             array_walk($cols, static function (&$index) {
                 $index = Coordinate::stringFromColumnIndex($index);
             });
 
             foreach ($cols as $col) {
                 $firstCell = $col . '1';
-                $lastCell  = $col . $style->getHeaderRowHeight();
+                $lastCell = $col . $style->getHeaderRowHeight();
                 $sheet->mergeCells($firstCell . ':' . $lastCell);
             }
             unset($firstCell, $lastCell);
         }
 
         //set style
-        $lastCell = $this->spreadsheetType->getMaxColName() . $style->getHeaderRowHeight();
+        $lastCell = $this->worksheetType->getMaxColName() . $style->getHeaderRowHeight();
         $sheet
             ->getStyle('A1' . ':' . $lastCell)
             ->applyFromArray([
                 'alignment' => [
-                    'vertical'   => Alignment::VERTICAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER,
                     'horizontal' => Alignment::HORIZONTAL_CENTER,
                 ],
                 'borders' => [
                     'allBorders' => [
                         'borderStyle' => Border::BORDER_MEDIUM,
-                        'color'       => ['argb' => 'FF366092'],
+                        'color' => ['argb' => 'FF366092'],
                     ],
                 ],
             ])
@@ -361,12 +362,12 @@ class ExcelGenerator
      */
     public function applyMergedCells(): void
     {
-        $sheet       = $this->spreadsheetType->getSheet();
-        $mergedCells = $this->spreadsheetType->getMergedCells();
+        $sheet = $this->worksheetType->getSheet();
+        $mergedCells = $this->worksheetType->getMergedCells();
 
         foreach ($mergedCells as $cells) {
             $sheet->mergeCells($cells)
-                  ->getStyle($cells)->getAlignment()->setHorizontal('center');
+                ->getStyle($cells)->getAlignment()->setHorizontal('center');
         }
     }
 }
