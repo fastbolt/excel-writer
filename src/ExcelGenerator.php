@@ -94,6 +94,13 @@ class ExcelGenerator
         return $this;
     }
 
+    public function setTitle(string $title): ExcelGenerator
+    {
+        $this->worksheetType->setTitle($title);
+
+        return $this;
+    }
+
     public function nextWorksheet(): self
     {
 
@@ -113,47 +120,49 @@ class ExcelGenerator
      */
     public function generateSpreadsheet(string $url = ''): SplFileInfo
     {
-//        $this->nextWorksheet();
-        $this->worksheetType = null; //all worksheets should be in worksheet array
+        if (count($this->worksheetType->getColumns()) !== 0) {
+            $this->nextWorksheet();
+        }
+        $this->worksheetType = null; //all worksheets should be in worksheet array now
 
         $i = 0;
         foreach ($this->spreadsheet->getWorksheetIterator() as $worksheet) {
-            $this->worksheetType = $this->worksheetTypes[$i];
+            $this->worksheetType = $this->worksheetTypes[$i++];
             $this->worksheetType->setWorksheet($worksheet);
             $worksheet->setTitle($this->worksheetType->getTitle());
-//            $headerRowHeight = $this->worksheetType->getStyle()->getHeaderRowHeight();
-//            $this->worksheetType
-//                ->setMaxRowNumber(count($this->worksheetType->getContent()) + $headerRowHeight)
-//                ->setContentStartRow($headerRowHeight + 1);
+            $headerRowHeight = $this->worksheetType->getStyle()->getHeaderRowHeight();
+            $this->worksheetType
+                ->setMaxRowNumber(count($this->worksheetType->getContent()) + $headerRowHeight)
+                ->setContentStartRow($headerRowHeight + 1);
+
+            if (count($this->worksheetType->getColumns()) === 0) {
+                throw new ArgumentCountError('At least one column must be set.');
+            }
+
+            $this->applyColumnHeaders($this->worksheetType);
+            $this->applyColumnFormat($this->worksheetType);
+            $this->applyHeaderStyle($this->worksheetType);
 //
-//            if (count($this->worksheetType->getColumns()) === 0) {
-//                throw new ArgumentCountError('At least one column must be set.');
-//            }
+            if ($this->worksheetType->getContent()) {
+                $this->applyContent($this->worksheetType->getContent());
+            }
 //
-//            $this->applyColumnHeaders($this->worksheetType);
-//            $this->applyColumnFormat($this->worksheetType);
-//            $this->applyHeaderStyle($this->worksheetType);
-//
-//            if ($this->worksheetType->getContent()) {
-//                $this->applyContent($this->worksheetType->getContent());
-//            }
-//
-//            $this->applyTableStyle($this->worksheetType->getStyle());
-//            $this->applyColumnStyle();
-//
-//            //auto filter
-//            $sheet = $this->spreadsheet->getActiveSheet();
-//            if ($this->worksheetType->getAutoFilterRange() !== '') {
-//                $sheet->getAutoFilter()->setRange($this->worksheetType->getAutoFilterRange());
-//            }
-//
-//            //auto size
-//            $dimensions = $sheet->getColumnDimensions();
-//            foreach ($dimensions as $col) {
-//                $col->setAutoSize(true);
-//            }
-//
-//            $this->applyMergedCells();
+            $this->applyTableStyle($this->worksheetType->getStyle());
+            $this->applyColumnStyle();
+
+            //auto filter
+            $sheet = $this->spreadsheet->getActiveSheet();
+            if ($this->worksheetType->getAutoFilterRange() !== '') {
+                $sheet->getAutoFilter()->setRange($this->worksheetType->getAutoFilterRange());
+            }
+
+            //auto size
+            $dimensions = $sheet->getColumnDimensions();
+            foreach ($dimensions as $col) {
+                $col->setAutoSize(true);
+            }
+
+            $this->applyMergedCells();
         }
 
         $file = $this->saveFile($url);
@@ -211,6 +220,7 @@ class ExcelGenerator
             for ($counter = 0; $counter < $colCount; $counter++) {
                 $col = $cols[$counter];
                 $colName = $col->getName();
+
                 $coordinates = $colName . $currentRow;
 
                 //makes sure long numbers marked as string are displayed correctly
