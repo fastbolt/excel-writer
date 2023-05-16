@@ -115,6 +115,7 @@ class ExcelGenerator
      */
     public function generateSpreadsheet(string $url = ''): SplFileInfo
     {
+        $this->nextWorksheet();
         $this->worksheetType = null; //all worksheets should be in worksheet array
 
         $i = 0;
