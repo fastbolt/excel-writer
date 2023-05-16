@@ -8,6 +8,7 @@ use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use SplFileInfo;
@@ -125,9 +126,10 @@ class ExcelGenerator
         }
         $this->worksheetType = null; //all worksheets should be in worksheet array now
 
-        $i = 0;
-        foreach ($this->spreadsheet->getWorksheetIterator() as $worksheet) {
-            $this->worksheetType = $this->worksheetTypes[$i++];
+        $this->spreadsheet->removeSheetByIndex(0);
+        foreach ($this->worksheetTypes as $index => $this->worksheetType) {
+            $worksheet = new Worksheet();
+
             $this->worksheetType->setWorksheet($worksheet);
             $worksheet->setTitle($this->worksheetType->getTitle());
             $headerRowHeight = $this->worksheetType->getStyle()->getHeaderRowHeight();
@@ -139,30 +141,31 @@ class ExcelGenerator
                 throw new ArgumentCountError('At least one column must be set.');
             }
 
-            $this->applyColumnHeaders($this->worksheetType);
-            $this->applyColumnFormat($this->worksheetType);
-            $this->applyHeaderStyle($this->worksheetType);
+            $this->applyColumnHeaders();
+            $this->applyColumnFormat();
+            $this->applyHeaderStyle();
 //
             if ($this->worksheetType->getContent()) {
                 $this->applyContent($this->worksheetType->getContent());
             }
 //
-            $this->applyTableStyle($this->worksheetType->getStyle());
+            $this->applyTableStyle();
             $this->applyColumnStyle();
 
             //auto filter
-            $sheet = $this->spreadsheet->getActiveSheet();
             if ($this->worksheetType->getAutoFilterRange() !== '') {
-                $sheet->getAutoFilter()->setRange($this->worksheetType->getAutoFilterRange());
+                $worksheet->getAutoFilter()->setRange($this->worksheetType->getAutoFilterRange());
             }
 
             //auto size
-            $dimensions = $sheet->getColumnDimensions();
+            $dimensions = $worksheet->getColumnDimensions();
             foreach ($dimensions as $col) {
                 $col->setAutoSize(true);
             }
 
             $this->applyMergedCells();
+
+            $this->spreadsheet->addSheet($worksheet);
         }
 
         $file = $this->saveFile($url);
