@@ -1,5 +1,5 @@
 # Excel-Writer
-This component is used for simple Excel-file generation in Symfony. You can pass either arrays of arrays, or arrays of entities to the generator class. If an entity references another entity as it's attribute, you will need to pass a callable to retrieve a specific value from that entity. Creates an Excel-file per execution containing a single worksheet.
+This component is used for simple Excel-file generation in Symfony. You can pass either arrays of arrays, or arrays of entities to the generator class. If an entity references another entity as it's attribute, you will need to pass a callable to retrieve a specific value from that entity.
 
 ## Installation
 This package is available through Composer/Packagist:
