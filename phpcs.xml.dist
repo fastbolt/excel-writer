@@ -23,6 +23,7 @@
 
     <rule ref="PSR12">
         <exclude name="Generic.WhiteSpace.ScopeIndent"/>
+        <exclude name="Generic.Files.LineEndings"/>
         <exclude name="PSR2.Methods.FunctionCallSignature"/>
         <exclude name="Squiz.ControlStructures.ControlSignature.NewlineAfterClosingBrace"/>
         <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody"/>
@@ -58,8 +59,5 @@
         </properties>
     </rule>
 
-    <rule ref="Spryker.Commenting.DocBlock">
-        <exclude-pattern>tests/</exclude-pattern>
-    </rule>
     <rule ref="Spryker.Commenting.FileDocBlock"/>
 </ruleset>

@@ -1,12 +1,18 @@
 <?php
 
+/**
+ * Copyright © Fastbolt Schraubengroßhandels GmbH.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Fastbolt\ExcelWriter\Tests;
 
 use Fastbolt\ExcelWriter\ColumnSetting;
 use Fastbolt\ExcelWriter\DataConverter;
 use Fastbolt\ExcelWriter\ExcelGenerator;
-use Fastbolt\ExcelWriter\WorksheetType;
 use Fastbolt\ExcelWriter\TableStyle;
+use Fastbolt\ExcelWriter\WorksheetType;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;

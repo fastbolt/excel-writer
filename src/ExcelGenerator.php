@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Copyright © Fastbolt Schraubengroßhandels GmbH.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Fastbolt\ExcelWriter;
 
 use ArgumentCountError;
@@ -26,10 +32,9 @@ class ExcelGenerator
     private array $worksheetTypes = [];
     private DataConverter $converter;
 
-    public function __construct(
-        ?WorksheetType $worksheetType = null,
-        ?DataConverter $converter = null
-    )
+    private WorksheetType $worksheetType;
+
+    public function __construct(?WorksheetType $worksheetType = null, ?DataConverter $converter = null)
     {
         $this->spreadsheet = new Spreadsheet();
         $this->worksheetType = $worksheetType ?? new WorksheetType($this->spreadsheet);

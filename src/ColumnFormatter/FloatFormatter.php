@@ -1,9 +1,15 @@
 <?php
 
+/**
+ * Copyright © Fastbolt Schraubengroßhandels GmbH.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Fastbolt\ExcelWriter\ColumnFormatter;
 
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Fastbolt\ExcelWriter\ColumnSetting;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 class FloatFormatter extends BaseFormatter
 {
@@ -24,7 +30,7 @@ class FloatFormatter extends BaseFormatter
      */
     public function getNumberFormat(): array
     {
-        $formatCode = '0.'.str_repeat('0', $this->decimalLength);
+        $formatCode = '0.' . str_repeat('0', $this->decimalLength);
 
         return ['formatCode' => $formatCode];
     }

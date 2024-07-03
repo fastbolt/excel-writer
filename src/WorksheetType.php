@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Copyright © Fastbolt Schraubengroßhandels GmbH.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Fastbolt\ExcelWriter;
 
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
@@ -30,6 +36,8 @@ class WorksheetType
     private string $autoFilterRange = '';
 
     private array $mergedCells = [];
+
+    private Spreadsheet $spreadsheet;
 
     public function __construct(Spreadsheet $spreadsheet)
     {
