@@ -30,6 +30,7 @@ class ExcelGenerator
      * @var array<int, WorksheetType> $worksheetTypes
      */
     private array $worksheetTypes = [];
+
     private DataConverter $converter;
 
     private WorksheetType $worksheetType;
