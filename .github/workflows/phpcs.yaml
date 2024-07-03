@@ -15,6 +15,10 @@ on:
 jobs:
     phpcs:
         runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                php-version:
+                    - "8.2"
         steps:
             - uses: actions/checkout@v2
               with:
