@@ -1,0 +1,27 @@
+name: "PHP_Codesniffer"
+
+on:
+    pull_request:
+        paths:
+            - "**.php"
+            - "phpcs.xml.dist"
+            - ".github/workflows/phpcs.yaml"
+    push:
+        paths:
+            - "**.php"
+            - "phpcs.xml.dist"
+            - ".github/workflows/phpcs.yaml"
+
+jobs:
+    phpcs:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0 # important!
+
+            - name: Install dependencies
+              run: composer install --prefer-dist --no-progress --no-suggest
+
+            - name: Run PHP_CodeSniffer
+              run: vendor/bin/phpcs

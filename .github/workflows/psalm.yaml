@@ -1,0 +1,28 @@
+name: "Psalm PHP checks"
+
+on:
+    pull_request:
+        paths:
+            - "**.php"
+            - "psalm.xml"
+            - ".psalm/baseline.xml"
+            - ".github/workflows/psalm.yaml"
+    push:
+        paths:
+            - "**.php"
+            - "psalm.xml"
+            - ".psalm/baseline.xml"
+            - ".github/workflows/psalm.yaml"
+
+jobs:
+    psalm:
+        name: Psalm
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@master
+
+            -   name: Psalm
+                uses: docker://ghcr.io/psalm/psalm-github-actions
+                with:
+                    composer_require_dev: true
+                    composer_ignore_platform_reqs: true
