@@ -2,15 +2,15 @@ name: "PHP_Codesniffer"
 
 on:
     pull_request:
-        paths:
-            - "**.php"
-            - "phpcs.xml.dist"
-            - ".github/workflows/phpcs.yaml"
+#        paths:
+#            - "**.php"
+#            - "phpcs.xml.dist"
+#            - ".github/workflows/phpcs.yaml"
     push:
-        paths:
-            - "**.php"
-            - "phpcs.xml.dist"
-            - ".github/workflows/phpcs.yaml"
+#        paths:
+#            - "**.php"
+#            - "phpcs.xml.dist"
+#            - ".github/workflows/phpcs.yaml"
 
 jobs:
     phpcs:

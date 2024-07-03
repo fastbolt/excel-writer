@@ -3,15 +3,15 @@ name: "PHPUnit tests"
 
 on:
     pull_request:
-        paths:
-            - "**.php"
-            - "phpunit.xml.dist"
-            - ".github/workflows/phpunit.yaml"
+#        paths:
+#            - "**.php"
+#            - "phpunit.xml.dist"
+#            - ".github/workflows/phpunit.yaml"
     push:
-        paths:
-            - "**.php"
-            - "phpunit.xml.dist"
-            - ".github/workflows/phpunit.yaml"
+#        paths:
+#            - "**.php"
+#            - "phpunit.xml.dist"
+#            - ".github/workflows/phpunit.yaml"
 
 jobs:
     unit-tests:
