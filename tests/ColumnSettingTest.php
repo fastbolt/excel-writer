@@ -12,6 +12,7 @@ use Fastbolt\ExcelWriter\ColumnFormatter\DateFormatter;
 use Fastbolt\ExcelWriter\ColumnFormatter\FloatFormatter;
 use Fastbolt\ExcelWriter\ColumnFormatter\IntegerFormatter;
 use Fastbolt\ExcelWriter\ColumnFormatter\StringFormatter;
+use Fastbolt\ExcelWriter\ColumnSetting;
 use PHPUnit\Framework\TestCase;
 
 /**

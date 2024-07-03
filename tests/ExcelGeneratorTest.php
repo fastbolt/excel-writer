@@ -59,7 +59,7 @@ class ExcelGeneratorTest extends TestCase
 
     public function testGenerateSpreadSheetWithColumns(): void
     {
-        $worksheetType = new WorksheetType();
+        $worksheetType = new WorksheetType(new Spreadsheet());
         $worksheetType
             ->setMaxColName('B')
             ->setColumns([
@@ -82,7 +82,7 @@ class ExcelGeneratorTest extends TestCase
 
     public function testGenerateSpreadSheetWithStyle(): void
     {
-        $worksheetType = new WorksheetType();
+        $worksheetType = new WorksheetType(new Spreadsheet());
         $worksheetType->setStyle(new TableStyle())
             ->setMaxColName('A');
         $worksheetType->setColumns([new ColumnSetting('foo')]);
@@ -110,7 +110,7 @@ class ExcelGeneratorTest extends TestCase
 
     public function testGenerateSpreadSheetWithContent(): void
     {
-        $worksheetType = new WorksheetType();
+        $worksheetType = new WorksheetType(new Spreadsheet());
         $worksheetType->setColumns([new ColumnSetting('foo')])
             ->setContent(['content']);
         $worksheetType->setMaxColName('A');
@@ -144,7 +144,7 @@ class ExcelGeneratorTest extends TestCase
         $autoFilter->expects(self::once())->method('setRange')
             ->with("B1:C14");
 
-        $worksheetType = new WorksheetType();
+        $worksheetType = new WorksheetType(new Spreadsheet());
         $worksheetType
             ->setColumns([new ColumnSetting('')])
             ->setMaxColName('A')
@@ -190,7 +190,7 @@ class ExcelGeneratorTest extends TestCase
 
     public function testSaveFile(): void
     {
-        $this->worksheetType = new WorksheetType();
+        $this->worksheetType = new WorksheetType(new Spreadsheet());
         $this->worksheetType->setSpreadsheet(new Spreadsheet());
 
         $generator = new ExcelGenerator(
@@ -206,7 +206,7 @@ class ExcelGeneratorTest extends TestCase
 
     public function testSaveFileWhileNoURL(): void
     {
-        $this->worksheetType = new WorksheetType();
+        $this->worksheetType = new WorksheetType(new Spreadsheet());
         $this->worksheetType->setSpreadsheet(new Spreadsheet());
 
         $generator = new ExcelGenerator(
@@ -228,7 +228,7 @@ class ExcelGeneratorTest extends TestCase
     public function testApplyContentWithEntity(): void
     {
         $content = [
-            new WorksheetType() //example object
+            new WorksheetType(new Spreadsheet()), //example object
         ];
 
         $columns = [
@@ -352,7 +352,7 @@ class ExcelGeneratorTest extends TestCase
             ->setHeaderStyle(['headerStyle'])
             ->setDataStyle(['dataStyle']);
         $tableStyle = (new TableStyle())->setHeaderRowHeight(4);
-        $worksheetType = (new WorksheetType())
+        $worksheetType = (new WorksheetType(new Spreadsheet()))
             ->setStyle($tableStyle)
             ->setContentStartRow(5)
             ->setMaxRowNumber(10)
@@ -398,7 +398,7 @@ class ExcelGeneratorTest extends TestCase
             ->setName('B')
             ->setHeaderStyle(['headerStyle']);
         $tableStyle = (new TableStyle())->setHeaderRowHeight(4);
-        $worksheetType = (new WorksheetType())
+        $worksheetType = (new WorksheetType(new Spreadsheet()))
             ->setStyle($tableStyle)
             ->setContentStartRow(5)
             ->setMaxRowNumber(10)
@@ -433,7 +433,7 @@ class ExcelGeneratorTest extends TestCase
             ->setName('B')
             ->setDataStyle(['dataStyle']);
         $tableStyle = (new TableStyle())->setHeaderRowHeight(4);
-        $worksheetType = (new WorksheetType())
+        $worksheetType = (new WorksheetType(new Spreadsheet()))
             ->setStyle($tableStyle)
             ->setContentStartRow(5)
             ->setMaxRowNumber(10)
@@ -643,7 +643,7 @@ class ExcelGeneratorTest extends TestCase
 
     public function testApplyMergedCells(): void
     {
-        $worksheetType = new WorksheetType();
+        $worksheetType = new WorksheetType(new Spreadsheet());
         $generator = new ExcelGenerator($worksheetType);
         $spreadsheet = $this->createMock(Spreadsheet::class);
         $sheet = $this->getMockBuilder(Worksheet::class)

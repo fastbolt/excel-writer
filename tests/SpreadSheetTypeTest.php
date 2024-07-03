@@ -11,6 +11,7 @@ namespace Fastbolt\ExcelWriter\Tests;
 use Fastbolt\ExcelWriter\ColumnSetting;
 use Fastbolt\ExcelWriter\TableStyle;
 use Fastbolt\ExcelWriter\WorksheetType;
+use InvalidArgumentException;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PHPUnit\Framework\TestCase;
 
@@ -21,11 +22,10 @@ class SpreadSheetTypeTest extends TestCase
 {
     public function testSettersGetters(): void
     {
-        $item = new WorksheetType();
+        $item = new WorksheetType($spreadsheet = new Spreadsheet());
         $item->setStyle(new TableStyle())
             ->setContent(['content'])
             ->setColumns([new ColumnSetting('')])
-            ->setSpreadsheet($spreadsheet = new Spreadsheet())
             ->setMaxColName('foo')
             ->setMaxRowNumber(200)
             ->setContentStartRow(100)
@@ -44,14 +44,14 @@ class SpreadSheetTypeTest extends TestCase
 
     public function testSetAutoFilterRangeNoRangeError(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $item = new WorksheetType();
+        $this->expectException(InvalidArgumentException::class);
+        $item = new WorksheetType(new Spreadsheet());
         $item->setAutoFilterRange('A');
     }
 
     public function testSetAndAddMergeCells(): void
     {
-        $item = new WorksheetType();
+        $item = new WorksheetType(new Spreadsheet());
         $item->setMergedCells(['foo', 'bar'])
              ->addMergedCells(['ham', 'eggs']);
 

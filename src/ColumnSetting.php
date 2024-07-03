@@ -37,13 +37,13 @@ class ColumnSetting
     /**
      * @param string          $header               column header
      * @param string          $format               format of the values
-     * @param string|callable $getter               method name of the getter of the attribute or a callable
+     * @param string|callable|null $getter          method name of the getter of the attribute or a callable
      * @param int             $decimalLength        only for float columns: how many decimals are displayed
      */
     public function __construct(
         string $header,
         string $format = self::FORMAT_STRING,
-        string|callable $getter = '',
+        string|callable|null $getter = '',
         int $decimalLength = 2,
         ?array $headerStyle = null,
         ?array $dataStyle = null
