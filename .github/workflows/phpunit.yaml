@@ -32,15 +32,6 @@ jobs:
             -   name: Validate composer.json and composer.lock
                 run: composer validate --strict
 
-            -   name: Cache Composer packages
-                id: composer-cache
-                uses: actions/cache@v2
-                with:
-                    path: vendor
-                    key: ${{ runner.os }}-composer-${{ matrix.composer-prefer }}$-${{ hashFiles('**/composer.lock') }}
-                    restore-keys: |
-                        ${{ runner.os }}-composer-${{ matrix.composer-prefer }}-
-
             -   name: Install dependencies
                 run: composer update --prefer-dist --no-progress --ignore-platform-req="ext-*" ${{ matrix.composer-prefer }}
 
