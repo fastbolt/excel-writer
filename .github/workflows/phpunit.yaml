@@ -1,45 +1,35 @@
-name: "PHPUnit tests"
+name: "PHPUnit"
 
 
 on:
     pull_request:
-        paths:
-            - "**.php"
-            - "phpunit.xml.dist"
-            - ".github/workflows/phpunit.yaml"
+#        paths:
+#            - "**.php"
+#            - "phpunit.xml.dist"
+#            - ".github/workflows/phpunit.yaml"
     push:
-        paths:
-            - "**.php"
-            - "phpunit.xml.dist"
-            - ".github/workflows/phpunit.yaml"
+#        paths:
+#            - "**.php"
+#            - "phpunit.xml.dist"
+#            - ".github/workflows/phpunit.yaml"
 
 jobs:
     unit-tests:
-        name: Unit Tests
+        name: PHPUnit
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                php-version:
-                    - "8.2"
+                php-versions: ['8.2', '8.3']
         steps:
-            -   uses: actions/checkout@master
+            - uses: actions/checkout@master
 
-            -   name: Set up PHP
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: ${{ matrix.php-versions }}
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-versions }}
 
             -   name: Validate composer.json and composer.lock
                 run: composer validate --strict
-
-            -   name: Cache Composer packages
-                id: composer-cache
-                uses: actions/cache@v2
-                with:
-                    path: vendor
-                    key: ${{ runner.os }}-composer-${{ matrix.composer-prefer }}$-${{ hashFiles('**/composer.lock') }}
-                    restore-keys: |
-                        ${{ runner.os }}-composer-${{ matrix.composer-prefer }}-
 
             -   name: Install dependencies
                 run: composer update --prefer-dist --no-progress --ignore-platform-req="ext-*" ${{ matrix.composer-prefer }}

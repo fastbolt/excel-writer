@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Copyright © Fastbolt Schraubengroßhandels GmbH.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Fastbolt\ExcelWriter;
 
 use Exception;
@@ -19,15 +25,17 @@ class DataConverter
         //apply custom order of columns
         $getters = [];
         foreach ($cols as $col) {
-            if (!$col->getGetter()) {
+            $getter = $col->getGetter();
+            if (null === $getter || '' === $getter) {
                 throw new Exception(
-                    'All getters need to be set in the ColumnSettings when using entities.'
-                    .'Missing getter for column '
-                    .'\'' . $col->getHeader() . '\''
+                    sprintf(
+                        "All getters need to be set in the ColumnSettings when using entities. Missing getter for column '%s'",
+                        $col->getHeader()
+                    )
                 );
             }
 
-            $getters[] = $col->getGetter();
+            $getters[] = $getter;
         }
 
         //call all getters

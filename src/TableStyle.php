@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Copyright © Fastbolt Schraubengroßhandels GmbH.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Fastbolt\ExcelWriter;
 
 class TableStyle
@@ -10,11 +16,6 @@ class TableStyle
 
     private array $dataRowStyle = [];
 
-    /**
-     * @param int $headerRows
-     *
-     * @return TableStyle
-     */
     public function setHeaderRowHeight(int $headerRows): TableStyle
     {
         $this->headerRowHeight = $headerRows;
@@ -30,19 +31,11 @@ class TableStyle
         return $this->headerRowHeight;
     }
 
-    /**
-     * @return array[]
-     */
     public function getHeaderStyle(): array
     {
         return $this->headerStyle;
     }
 
-    /**
-     * @param array[] $headerStyle
-     *
-     * @return TableStyle
-     */
     public function setHeaderStyle(array $headerStyle): TableStyle
     {
         $this->headerStyle = $headerStyle;
@@ -50,19 +43,11 @@ class TableStyle
         return $this;
     }
 
-    /**
-     * @return array[]
-     */
     public function getDataRowStyle(): array
     {
         return $this->dataRowStyle;
     }
 
-    /**
-     * @param array[] $rowStyle
-     *
-     * @return TableStyle
-     */
     public function setDataRowStyle(array $rowStyle): TableStyle
     {
         $this->dataRowStyle = $rowStyle;

@@ -1,11 +1,18 @@
 <?php
 
-namespace Fastbolt\ExcelWriter;
+/**
+ * Copyright © Fastbolt Schraubengroßhandels GmbH.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Fastbolt\ExcelWriter\Tests;
 
 use Fastbolt\ExcelWriter\ColumnFormatter\DateFormatter;
 use Fastbolt\ExcelWriter\ColumnFormatter\FloatFormatter;
 use Fastbolt\ExcelWriter\ColumnFormatter\IntegerFormatter;
 use Fastbolt\ExcelWriter\ColumnFormatter\StringFormatter;
+use Fastbolt\ExcelWriter\ColumnSetting;
 use PHPUnit\Framework\TestCase;
 
 /**

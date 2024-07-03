@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Copyright © Fastbolt Schraubengroßhandels GmbH.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Fastbolt\ExcelWriter\Tests;
 
 use DateTime;
@@ -30,8 +36,9 @@ class DataConverterTest extends TestCase
 
         $converter = new DataConverter();
 
-        $this->expectExceptionMessage('All getters need to be set in the ColumnSettings when using entities.'
-            .'Missing getter for column \'value\'');
+        $this->expectExceptionMessage(
+            'All getters need to be set in the ColumnSettings when using entities. Missing getter for column \'value\''
+        );
         $converter->convertEntityToArray([$this->object], $cols);
     }
 

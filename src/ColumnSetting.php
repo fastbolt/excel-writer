@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Copyright © Fastbolt Schraubengroßhandels GmbH.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Fastbolt\ExcelWriter;
 
 use Fastbolt\ExcelWriter\ColumnFormatter\ColumnFormatter;
@@ -24,23 +30,23 @@ class ColumnSetting
     private ?array $headerStyle;
     private ?array $dataStyle;
 
-    /** @var callable|string name of the get method (like getId) or a callable taking the object an argument */
+    /** @var string|callable|null name of the get method (like getId) or a callable taking the object an argument */
     private $getter;
 
 
     /**
      * @param string          $header               column header
      * @param string          $format               format of the values
-     * @param string|callable $getter               method name of the getter of the attribute or a callable
+     * @param string|callable|null $getter          method name of the getter of the attribute or a callable
      * @param int             $decimalLength        only for float columns: how many decimals are displayed
      */
     public function __construct(
         string $header,
         string $format = self::FORMAT_STRING,
-        $getter = '',
+        string|callable|null $getter = '',
         int $decimalLength = 2,
-        $headerStyle = null,
-        $dataStyle = null
+        ?array $headerStyle = null,
+        ?array $dataStyle = null
     ) {
         $this->header           = $header;
         $this->format           = $format;
@@ -103,19 +109,12 @@ class ColumnSetting
         return $this;
     }
 
-    /**
-     * @return string|callable
-     */
-    public function getGetter()
+    public function getGetter(): string|callable|null
     {
         return $this->getter;
     }
 
-    /**
-     * @param string|callable $getter
-     * @return $this
-     */
-    public function setGetter($getter): self
+    public function setGetter(string|callable|null $getter): self
     {
         $this->getter = $getter;
 

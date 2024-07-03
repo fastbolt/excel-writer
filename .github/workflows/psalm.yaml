@@ -1,18 +1,18 @@
-name: "Psalm PHP checks"
+name: "Psalm"
 
 on:
     pull_request:
-        paths:
-            - "**.php"
-            - "psalm.xml"
-            - ".psalm/baseline.xml"
-            - ".github/workflows/psalm.yaml"
+#        paths:
+#            - "**.php"
+#            - "psalm.xml"
+#            - ".psalm/baseline.xml"
+#            - ".github/workflows/psalm.yaml"
     push:
-        paths:
-            - "**.php"
-            - "psalm.xml"
-            - ".psalm/baseline.xml"
-            - ".github/workflows/psalm.yaml"
+#        paths:
+#            - "**.php"
+#            - "psalm.xml"
+#            - ".psalm/baseline.xml"
+#            - ".github/workflows/psalm.yaml"
 
 jobs:
     psalm:
