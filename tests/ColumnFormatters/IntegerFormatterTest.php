@@ -1,6 +1,6 @@
 <?php
 
-namespace ColumnFormatters;
+namespace Fastbolt\ExcelWriter\Tests\ColumnFormatters;
 
 use Fastbolt\ExcelWriter\ColumnFormatter\IntegerFormatter;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;

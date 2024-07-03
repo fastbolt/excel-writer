@@ -1,6 +1,6 @@
 <?php
 
-namespace Fastbolt\ExcelWriter;
+namespace Fastbolt\ExcelWriter\Tests;
 
 use Fastbolt\ExcelWriter\ColumnFormatter\DateFormatter;
 use Fastbolt\ExcelWriter\ColumnFormatter\FloatFormatter;
