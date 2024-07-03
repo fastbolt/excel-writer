@@ -20,12 +20,15 @@ jobs:
                 php-version:
                     - "8.2"
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@master
+
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
               with:
-                  fetch-depth: 0 # important!
+                  php-version: ${{ matrix.php-versions }}
 
             - name: Install dependencies
-              run: composer install --prefer-dist --no-progress --no-suggest
+              run: composer update --prefer-dist --no-progress --ignore-platform-req="ext-*" ${{ matrix.composer-prefer }}
 
             - name: Run PHP_CodeSniffer
               run: vendor/bin/phpcs
