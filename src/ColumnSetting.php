@@ -43,10 +43,10 @@ class ColumnSetting
     public function __construct(
         string $header,
         string $format = self::FORMAT_STRING,
-        $getter = '',
+        string|callable $getter = '',
         int $decimalLength = 2,
-        $headerStyle = null,
-        $dataStyle = null
+        ?array $headerStyle = null,
+        ?array $dataStyle = null
     ) {
         $this->header           = $header;
         $this->format           = $format;

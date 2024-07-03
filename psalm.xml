@@ -9,7 +9,7 @@
         findUnusedBaselineEntry="true"
         findUnusedCode="false"
         autoloader="vendor/autoload.php"
-        cacheDirectory="var/cache/psalm/" errorBaseline="./.psalm/baseline.xml">
+        cacheDirectory="var/cache/psalm/">
     <projectFiles>
         <directory name="src/"/>
 

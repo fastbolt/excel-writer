@@ -11,12 +11,13 @@ namespace Fastbolt\ExcelWriter;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use RuntimeException;
 
 class WorksheetType
 {
-    private Worksheet $worksheet;
+    private ?Worksheet $worksheet = null;
 
-    private $title = 'Worksheet';
+    private string $title = 'Worksheet';
 
     private string $maxColName = '';
 
@@ -35,29 +36,24 @@ class WorksheetType
 
     private string $autoFilterRange = '';
 
+    /**
+     * @var string[]
+     */
     private array $mergedCells = [];
 
     private Spreadsheet $spreadsheet;
 
     public function __construct(Spreadsheet $spreadsheet)
     {
-        $this->setSpreadsheet($spreadsheet);
+        $this->spreadsheet = $spreadsheet;
         $this->style = new TableStyle();
     }
 
-    /**
-     * @return Spreadsheet
-     */
     public function getSpreadsheet(): Spreadsheet
     {
         return $this->spreadsheet;
     }
 
-    /**
-     * @param Spreadsheet $spreadsheet
-     *
-     * @return WorksheetType
-     */
     public function setSpreadsheet(Spreadsheet $spreadsheet): WorksheetType
     {
         $this->spreadsheet = $spreadsheet;
@@ -65,20 +61,11 @@ class WorksheetType
         return $this;
     }
 
-
-    /**
-     * @return string
-     */
     public function getMaxColName(): string
     {
         return $this->maxColName;
     }
 
-    /**
-     * @param string $maxColName
-     *
-     * @return WorksheetType
-     */
     public function setMaxColName(string $maxColName): WorksheetType
     {
         $this->maxColName = $maxColName;
@@ -86,19 +73,11 @@ class WorksheetType
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getMaxRowNumber(): int
     {
         return $this->maxRowNumber;
     }
 
-    /**
-     * @param int $maxRowNumber
-     *
-     * @return WorksheetType
-     */
     public function setMaxRowNumber(int $maxRowNumber): WorksheetType
     {
         $this->maxRowNumber = $maxRowNumber;
@@ -106,19 +85,11 @@ class WorksheetType
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getContentStartRow(): int
     {
         return $this->contentStartRow;
     }
 
-    /**
-     * @param int $contentStartRow
-     *
-     * @return WorksheetType
-     */
     public function setContentStartRow(int $contentStartRow): WorksheetType
     {
         $this->contentStartRow = $contentStartRow;
@@ -126,19 +97,11 @@ class WorksheetType
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getContent(): array
     {
         return $this->content;
     }
 
-    /**
-     * @param array $content
-     *
-     * @return WorksheetType
-     */
     public function setContent(array $content): WorksheetType
     {
         $this->content = $content;
@@ -146,19 +109,11 @@ class WorksheetType
         return $this;
     }
 
-    /**
-     * @return TableStyle
-     */
     public function getStyle(): TableStyle
     {
         return $this->style;
     }
 
-    /**
-     * @param TableStyle $style
-     *
-     * @return WorksheetType
-     */
     public function setStyle(TableStyle $style): WorksheetType
     {
         $this->style = $style;
@@ -176,8 +131,6 @@ class WorksheetType
 
     /**
      * @param ColumnSetting[] $columns
-     *
-     * @return WorksheetType
      */
     public function setColumns(array $columns): WorksheetType
     {
@@ -186,10 +139,6 @@ class WorksheetType
         return $this;
     }
 
-    /**
-     * @param string $range
-     * @return WorksheetType
-     */
     public function setAutoFilterRange(string $range): WorksheetType
     {
         if (!Coordinate::coordinateIsRange($range)) {
@@ -201,17 +150,13 @@ class WorksheetType
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAutoFilterRange(): string
     {
         return $this->autoFilterRange;
     }
 
     /**
-     * @param array $mergedCells
-     * @return WorksheetType
+     * @param string[] $mergedCells
      */
     public function setMergedCells(array $mergedCells): WorksheetType
     {
@@ -222,7 +167,6 @@ class WorksheetType
 
     /**
      * @param string[] $mergedCells
-     * @return WorksheetType
      */
     public function addMergedCells(array $mergedCells): WorksheetType
     {
@@ -234,40 +178,28 @@ class WorksheetType
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getMergedCells(): array
     {
         return $this->mergedCells;
     }
 
-    /**
-     * @return Worksheet
-     */
     public function getWorksheet(): Worksheet
     {
-        return $this->worksheet;
+        return $this->worksheet ?: throw new RuntimeException('Worksheet not set');
     }
 
-    /**
-     * @param Worksheet $worksheet
-     */
     public function setWorksheet(Worksheet $worksheet): void
     {
         $this->worksheet = $worksheet;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     */
     public function setTitle(string $title): void
     {
         $this->title = $title;
