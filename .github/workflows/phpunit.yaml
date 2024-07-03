@@ -1,4 +1,4 @@
-name: "PHPUnit tests"
+name: "PHPUnit"
 
 
 on:
@@ -15,19 +15,15 @@ on:
 
 jobs:
     unit-tests:
-        name: Unit Tests
+        name: PHPUnit
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                php-version:
-                    - "8.2"
         steps:
             -   uses: actions/checkout@master
 
             -   name: Set up PHP
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: ${{ matrix.php-versions }}
+                    php-version: '8.2'
 
             -   name: Validate composer.json and composer.lock
                 run: composer validate --strict

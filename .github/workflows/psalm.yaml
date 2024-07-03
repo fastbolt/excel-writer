@@ -1,4 +1,4 @@
-name: "Psalm PHP checks"
+name: "Psalm"
 
 on:
     pull_request:
