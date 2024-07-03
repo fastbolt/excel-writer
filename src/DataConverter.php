@@ -25,7 +25,8 @@ class DataConverter
         //apply custom order of columns
         $getters = [];
         foreach ($cols as $col) {
-            if (!$col->getGetter()) {
+            $getter = $col->getGetter();
+            if (null === $getter || '' === $getter) {
                 throw new Exception(
                     sprintf(
                         "All getters need to be set in the ColumnSettings when using entities. Missing getter for column '%s'",
@@ -34,7 +35,7 @@ class DataConverter
                 );
             }
 
-            $getters[] = $col->getGetter();
+            $getters[] = $getter;
         }
 
         //call all getters

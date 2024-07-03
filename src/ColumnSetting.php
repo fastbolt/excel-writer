@@ -30,7 +30,7 @@ class ColumnSetting
     private ?array $headerStyle;
     private ?array $dataStyle;
 
-    /** @var callable|string name of the get method (like getId) or a callable taking the object an argument */
+    /** @var string|callable|null name of the get method (like getId) or a callable taking the object an argument */
     private $getter;
 
 
@@ -109,19 +109,12 @@ class ColumnSetting
         return $this;
     }
 
-    /**
-     * @return string|callable
-     */
-    public function getGetter()
+    public function getGetter(): string|callable|null
     {
         return $this->getter;
     }
 
-    /**
-     * @param string|callable $getter
-     * @return $this
-     */
-    public function setGetter($getter): self
+    public function setGetter(string|callable|null $getter): self
     {
         $this->getter = $getter;
 
