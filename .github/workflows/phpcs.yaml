@@ -16,13 +16,16 @@ jobs:
     phpcs:
         name: PHP_CodeSniffer
         runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                php-versions: ['8.1', '8.2', '8.3']
         steps:
             - uses: actions/checkout@master
 
             - name: Set up PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: '8.2'
+                  php-version: ${{ matrix.php-versions }}
 
             - name: Install dependencies
               run: composer update --prefer-dist --no-progress --ignore-platform-req="ext-*" ${{ matrix.composer-prefer }}
