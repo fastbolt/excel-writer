@@ -1,0 +1,13 @@
+# composer binaries and sources
+/vendor/
+/composer.phar
+
+# phpstorm data / cache folders
+.idea/
+
+# composer lock file
+composer.lock
+
+# cache directory
+var/
+.phpunit.result.cache
