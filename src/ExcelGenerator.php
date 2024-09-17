@@ -291,7 +291,7 @@ class ExcelGenerator
         $sheet = $this->worksheetType->getWorksheet();
         $headerCount = count($columns);
         $columnLetters = [];
-        for ($index = 0; $index < $headerCount; $index++) {
+        for ($index = 1; $index < $headerCount; $index++) {
             $columnLetters[] = Coordinate::stringFromColumnIndex($index);
         }
 
