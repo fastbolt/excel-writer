@@ -24,7 +24,8 @@ class ColumnSetting
     public const FORMAT_STRING     = 'string';
     public const FORMAT_DATE       = 'datetime';
     public const FOMRAT_PERCENTAGE = 'percentage';
-    public const FORMAT_CURRENCY   = 'currency';
+    public const FORMAT_CURRENCY_EUR   = 'currency_eur';
+    public const FORMAT_CURRENCY_USD   = 'currency_usd';
 
     private string $format;
     private string $name = '';    //excel-name for the column
@@ -88,22 +89,16 @@ class ColumnSetting
      */
     public function getFormatter(): ColumnFormatter
     {
-        switch ($this->format) {
-            case self::FORMAT_STRING:
-                return new StringFormatter();
-            case self::FORMAT_DATE:
-                return new DateFormatter();
-            case self::FORMAT_INTEGER:
-                return new IntegerFormatter();
-            case self::FORMAT_FLOAT:
-                return new FloatFormatter($this);
-            case self::FOMRAT_PERCENTAGE:
-                return new PercentageFormatter($this);
-            case self::FORMAT_CURRENCY:
-                return new CurrencyFormatter($this);
-        }
-
-        return new StringFormatter();
+        return match ($this->format) {
+            self::FORMAT_STRING => new StringFormatter(),
+            self::FORMAT_DATE => new DateFormatter(),
+            self::FORMAT_INTEGER => new IntegerFormatter(),
+            self::FORMAT_FLOAT => new FloatFormatter($this),
+            self::FOMRAT_PERCENTAGE => new PercentageFormatter($this),
+            self::FORMAT_CURRENCY_EUR => new CurrencyFormatter($this, CurrencyFormatter::CURRENCY_EUR),
+            self::FORMAT_CURRENCY_USD => new CurrencyFormatter($this, CurrencyFormatter::CURRENCY_USD),
+            default => new StringFormatter(),
+        };
     }
 
     /**
