@@ -15,7 +15,6 @@ use Fastbolt\ExcelWriter\ColumnFormatter\FloatFormatter;
 use Fastbolt\ExcelWriter\ColumnFormatter\IntegerFormatter;
 use Fastbolt\ExcelWriter\ColumnFormatter\PercentageFormatter;
 use Fastbolt\ExcelWriter\ColumnFormatter\StringFormatter;
-use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Current;
 
 class ColumnSetting
 {
