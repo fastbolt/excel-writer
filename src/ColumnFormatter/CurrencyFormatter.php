@@ -25,7 +25,7 @@ class CurrencyFormatter extends BaseFormatter
 
     /**
      * @param ColumnSetting       $column
-     * @param string{'EUR'|'USD'} $currency
+     * @param 'EUR'|'USD' $currency
      */
     public function __construct(ColumnSetting $column, string $currency)
     {
