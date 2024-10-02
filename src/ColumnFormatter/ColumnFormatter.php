@@ -15,4 +15,7 @@ interface ColumnFormatter
 
     /** @return string[]|null */
     public function getNumberFormat(): ?array;
+
+    /** @return string|null */
+    public function getFormatCode(): ?string;
 }

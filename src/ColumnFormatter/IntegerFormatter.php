@@ -11,7 +11,7 @@ namespace Fastbolt\ExcelWriter\ColumnFormatter;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class IntegerFormatter implements ColumnFormatter
+class IntegerFormatter extends BaseFormatter
 {
     public function getAlignment(): array
     {

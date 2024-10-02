@@ -321,6 +321,11 @@ class ExcelGenerator
                 $format['numberFormat'] = $numberFormat;
             }
 
+            //needed for currencies
+            if (null !== ($formatCode = $formatter->getFormatCode())) {
+                $format['numberFormat']['formatCode'] = $formatCode;
+            }
+
             $sheet->getStyle($column->getName() . ':' . $column->getName())
                 ->applyFromArray($format);
         }

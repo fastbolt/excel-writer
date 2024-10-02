@@ -21,4 +21,9 @@ class BaseFormatter implements ColumnFormatter
     {
         return null;
     }
+
+    public function getFormatCode(): ?string
+    {
+        return null;
+    }
 }
