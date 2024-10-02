@@ -323,7 +323,7 @@ class ExcelGenerator
 
             //needed for currencies
             if (null !== ($formatCode = $formatter->getFormatCode())) {
-                $format['formatCode'] = $formatCode;
+                $format['numberFormat']['formatCode'] = $formatCode;
             }
 
             $sheet->getStyle($column->getName() . ':' . $column->getName())
