@@ -9,19 +9,22 @@
 namespace Fastbolt\ExcelWriter;
 
 use Fastbolt\ExcelWriter\ColumnFormatter\ColumnFormatter;
+use Fastbolt\ExcelWriter\ColumnFormatter\CurrencyFormatter;
 use Fastbolt\ExcelWriter\ColumnFormatter\DateFormatter;
 use Fastbolt\ExcelWriter\ColumnFormatter\FloatFormatter;
 use Fastbolt\ExcelWriter\ColumnFormatter\IntegerFormatter;
 use Fastbolt\ExcelWriter\ColumnFormatter\PercentageFormatter;
 use Fastbolt\ExcelWriter\ColumnFormatter\StringFormatter;
+use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Current;
 
 class ColumnSetting
 {
-    public const FORMAT_INTEGER = 'int';
-    public const FORMAT_FLOAT   = 'float';
-    public const FORMAT_STRING  = 'string';
-    public const FORMAT_DATE    = 'datetime';
+    public const FORMAT_INTEGER    = 'int';
+    public const FORMAT_FLOAT      = 'float';
+    public const FORMAT_STRING     = 'string';
+    public const FORMAT_DATE       = 'datetime';
     public const FOMRAT_PERCENTAGE = 'percentage';
+    public const FORMAT_CURRENCY   = 'currency';
 
     private string $format;
     private string $name = '';    //excel-name for the column
@@ -96,6 +99,8 @@ class ColumnSetting
                 return new FloatFormatter($this);
             case self::FOMRAT_PERCENTAGE:
                 return new PercentageFormatter($this);
+            case self::FORMAT_CURRENCY:
+                return new CurrencyFormatter($this);
         }
 
         return new StringFormatter();
